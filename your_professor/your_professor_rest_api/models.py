@@ -362,12 +362,45 @@ class User(StructuredNode):
     date_joined = DateTimeProperty(default_now=True)
     birthday = DateProperty()
     course = RelationshipTo(ProfessorCourse, "TAKES_PART_IN")
+    specialization = RelationshipTo(Specialization, "STUDIES")
     reactsToReview = RelationshipTo('Review', "REACTS_TO", model=ReactsTo)
     reactsToReply = RelationshipTo('Reply', "REACTS_TO", model=ReactsTo)
+
+
+class Tag(StructuredNode):
+    uid = UniqueIdProperty()
+    tag = StringProperty(max_length=50, required=True)
+
+
+class Review(StructuredNode):
+    uid = UniqueIdProperty()
+    is_text_visible = BooleanProperty(required=True)
+    text = StringProperty(max_length=3000)
+    QUALITY = {1: "The worst", 2: "bad", 3: "ok", 4: "good", 5: "great"}
+    quality = StringProperty(choices=QUALITY, required=True)
+    DIFFICULTY = {1: "Very difficult", 2: "difficult", 3: "moderate", 4: "easy", 5: "very easy"}
+    difficulty = StringProperty(choices=DIFFICULTY, required=True)
+    author = RelationshipFrom(User, "CREATED_REVIEW")
+    tag = RelationshipTo(Tag, "IS_TAGGED")
+    creation_date = DateTimeProperty(default_now=True)
+    most_recent_edit_date = DateTimeProperty()
+
+
+class Reply(StructuredNode):
+    uid = UniqueIdProperty()
+    is_text_visible = BooleanProperty(required=True)
+    text = StringProperty(max_length=3000)
+    author = RelationshipFrom(User, "CREATED_REPLY")
+    replies_to_review = RelationshipTo(Review, "REPLIES_TO")
+    replies_to_reply = RelationshipTo("Reply", "REPLIES_TO")
+    creation_date = DateTimeProperty(default_now=True)
+    most_recent_edit_date = DateTimeProperty()
+
 
 #
 # class Country(StructuredNode):
 #     code = StringProperty(unique_index=True, required=True)
+
 
 class Person(StructuredNode):
     uuid = UniqueIdProperty()
