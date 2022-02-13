@@ -7,7 +7,7 @@ from neomodel import (config, StructuredNode, StringProperty, IntegerProperty,
                       EmailProperty, DateTimeProperty, DateProperty, Relationship, StructuredRel)
 
 
-config.DATABASE_URL = 'bolt://neo4j:3BejhhmCyUa4oPLm2XAgmX8GcsGqipFf9EtQvmPuo@localhost:7687'
+# config.DATABASE_URL = 'bolt://neo4j:3BejhhmCyUa4oPLm2XAgmX8GcsGqipFf9EtQvmPuo@localhost:7687'
 
 # TODO add cardinality to models
 # TODO add relation properties similar to class ReactsTo(StructuredRel)
@@ -342,13 +342,12 @@ class Specialization(StructuredNode):  # example "informatyka stosowana", "fizyk
 
 class Professor(StructuredNode):
     uid = UniqueIdProperty()
-    name = StringProperty(max_length=100)
     is_active = BooleanProperty(default=True)
     first_name = StringProperty(max_length=100)
     last_name = StringProperty(max_length=100)
     birth_year = IntegerProperty()
     is_male = BooleanProperty(required=True)
-    DEGREES = {0: 'no_degree', 1: "bachelor", 2: "master", 3: "doctor"}
+    DEGREES = {'0': 'no_degree', '1': "bachelor", '2': "master", '3': "doctor"}
     degree = StringProperty(required=True, choices=DEGREES)
 
 
@@ -357,7 +356,7 @@ class ProfessorCourse(StructuredNode):
     is_active = BooleanProperty(default=True)
     course = RelationshipFrom(Course, "IS_TAUGHT_BY")
     professor = RelationshipFrom(Professor, "TEACHES")
-    is_professor_lecturer = BooleanProperty()
+    is_professor_lecturer = BooleanProperty(required=True)
     review = RelationshipFrom('Review', "reviews")
 
 
