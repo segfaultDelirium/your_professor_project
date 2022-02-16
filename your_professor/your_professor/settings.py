@@ -38,6 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'your_professor_rest_api',
+    'graphene_django',
 ]
 
 MIDDLEWARE = [
@@ -85,11 +87,15 @@ DATABASES = {
    }
 }
 
-config.DATABASE_URL = 'bolt://neo4j:3BejhhmCyUa4oPLm2XAgmX8GcsGqipFf9EtQvmPuo@localhost:7687/yourProfessor'  # default
+config.DATABASE_URL = 'bolt://neo4j:3BejhhmCyUa4oPLm2XAgmX8GcsGqipFf9EtQvmPuo@localhost:7687/neo4j'  # default
 # You can specify a database name: 'bolt://neo4j:neo4j@localhost:7687/mydb'
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
+
+GRAPHENE = {
+    "SCHEMA": "your_professor_rest_api.schema.schema"
+}
 
 AUTH_PASSWORD_VALIDATORS = [
     {

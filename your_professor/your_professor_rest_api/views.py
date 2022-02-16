@@ -1,12 +1,36 @@
-from django.shortcuts import render
+import datetime
+
 from django.http import HttpResponse
 from .models import (Person, Country, Region, City,
-    University, Faculty, Specialization, ScienceDomain, Course, Professor, ProfessorCourse)
+    University, Faculty, Specialization, ScienceDomain, Course, Professor, ProfessorCourse, User)
+from hashlib import pbkdf2_hmac
+from os import urandom
+
 
 # Create your views here.
 
 
+def add_user():
+    salt = urandom(32)
+    password = "abandonship"
+    password_hashed = pbkdf2_hmac('sha256', password.encode('UTF-8'), salt, 100000)
+    user = User(username="Charlie", salt=salt.hex(), password=password_hashed, email="Charlie@gmail.com",
+                first_name="Charlie", last_name="Charliee", birthday=datetime.datetime(2001, 3, 17))
+    user.save()
+
+    # verify:
+    print(user.password)
+    print(pbkdf2_hmac(
+        'sha256',
+        password.encode('UTF-8'),
+        bytes.fromhex(user.salt),
+        100000))
+
+
 def index(request):
+
+    user = User.nodes.get(last_name="Charliee")
+    print(user.date_joined)
 
     # gawron = Professor(first_name="Przemysław", last_name="Gawroński", is_male=True, degree='3').save()
     # beata = Professor(first_name="Beata", last_name="Orchel", is_male=False, degree='3').save()
