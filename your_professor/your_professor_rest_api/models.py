@@ -2,6 +2,7 @@ from django.db import models
 
 # Create your models here.
 
+from django_neomodel import DjangoNode
 from neomodel import (config, StructuredNode, StringProperty, IntegerProperty,
                       UniqueIdProperty, RelationshipTo, RelationshipFrom, BooleanProperty,
                       EmailProperty, DateTimeProperty, DateProperty, Relationship, StructuredRel)
@@ -265,7 +266,7 @@ COUNTRIES = {
 }
 
 
-class Country(StructuredNode):
+class Country(DjangoNode):
     uid = UniqueIdProperty()
     local_language_name = StringProperty(required=True)
     ISO_code_name = StringProperty(choices=COUNTRIES, required=True)
