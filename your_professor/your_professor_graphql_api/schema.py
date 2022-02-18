@@ -14,17 +14,31 @@ type_defs = gql("""
         uid: String!
         local_language_name: String!
         ISO_code_name: String!
-        is_active: Boolean
+        is_active: Boolean!
+        region: [Region!]!
+    }
+    
+    type Region{
+        uid: String!
+        local_language_name: String!
+        name: String!
+        is_active: Boolean!
     }
 """)
 
+country = ObjectType("Country")
 
 @query.field("country")
 def resolve_country(_, info, local_language_name=None):
     print(local_language_name)
-    polska = Country.nodes.get(local_language_name="Polska")
-    print(polska)
-    return polska
+    if local_language_name:
+        return Country.nodes.get(local_language_name="Polska")
+    return Country.nodes.all()
+
+
+@country.field("region")
+def resolve_region(_, info):
+    return Region.nodes.all()
 
 
 @query.field("hello")

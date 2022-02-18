@@ -38,7 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'your_professor_rest_api',
+    'your_professor_graphql_api',
     # 'graphene_django',
     'ariadne_django',
 ]
@@ -95,7 +95,7 @@ config.DATABASE_URL = 'bolt://neo4j:3BejhhmCyUa4oPLm2XAgmX8GcsGqipFf9EtQvmPuo@lo
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
 
 # GRAPHENE = {
-#     "SCHEMA": "your_professor_rest_api.schema.schema"
+#     "SCHEMA": "your_professor_graphql_api.schema.schema"
 # }
 
 AUTH_PASSWORD_VALIDATORS = [
