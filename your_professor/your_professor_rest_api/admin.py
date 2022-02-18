@@ -1,5 +1,10 @@
-from django.contrib import admin
-from .models import Region
+# from django.contrib import admin
+from django_neomodel import admin as neo_admin
+from .models import Book
 
-# Register your models here.
 
+# class BookAdmin(ModelAdmin):
+#     list_display = ("title", "created")
+
+
+# neo_admin.register(Book, BookAdmin)
