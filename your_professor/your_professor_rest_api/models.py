@@ -359,7 +359,7 @@ class ProfessorCourse(StructuredNode):
 
 
 class ReactsTo(StructuredRel):
-    reaction = StringProperty(choices={1: "like", 0: "dislike"}, required=True)
+    reaction = StringProperty(choices={'L': "like", 'D': "dislike"}, required=True)
 
 
 class User(StructuredNode):

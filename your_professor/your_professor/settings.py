@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'your_professor_rest_api',
     # 'graphene_django',
+    'ariadne_django',
 ]
 
 MIDDLEWARE = [
