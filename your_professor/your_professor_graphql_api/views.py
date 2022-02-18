@@ -33,7 +33,7 @@ def add_user():
 
 
 def index(request):
-
+    print(Country.nodes.all())
     user = User.nodes.get(last_name="Charliee")
     print(user.date_joined)
 

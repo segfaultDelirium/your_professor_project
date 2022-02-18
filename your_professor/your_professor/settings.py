@@ -38,9 +38,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'django_neomodel',
-    'your_professor_rest_api',
-    'graphene_django',
+    'your_professor_graphql_api',
+    # 'graphene_django',
+    'ariadne_django',
 ]
 
 MIDDLEWARE = [

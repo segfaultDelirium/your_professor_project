@@ -8,8 +8,6 @@ from neomodel import (config, StructuredNode, StringProperty, IntegerProperty,
                       EmailProperty, DateTimeProperty, DateProperty, Relationship, StructuredRel)
 
 
-# config.DATABASE_URL = 'bolt://neo4j:3BejhhmCyUa4oPLm2XAgmX8GcsGqipFf9EtQvmPuo@localhost:7687'
-
 # TODO add cardinality to models
 # TODO add relation properties similar to class ReactsTo(StructuredRel)
 
@@ -367,7 +365,7 @@ class ProfessorCourse(StructuredNode):
 
 
 class ReactsTo(StructuredRel):
-    reaction = StringProperty(choices={1: "like", 0: "dislike"}, required=True)
+    reaction = StringProperty(choices={'L': "like", 'D': "dislike"}, required=True)
 
 
 class User(StructuredNode):
