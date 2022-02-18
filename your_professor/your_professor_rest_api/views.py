@@ -8,6 +8,11 @@ from os import urandom
 
 
 # Create your views here.
+#
+# from .models import Book
+#
+# def get_books(request):
+#     return render('')
 
 
 def add_user():

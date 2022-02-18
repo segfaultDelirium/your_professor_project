@@ -266,6 +266,11 @@ COUNTRIES = {
 }
 
 
+# class Book(StructuredNode):
+#     title = StringProperty(unique_index=True)
+#     published = DateProperty()
+#
+
 class Country(DjangoNode):
     uid = UniqueIdProperty()
     local_language_name = StringProperty(required=True)
