@@ -275,7 +275,7 @@ class Country(DjangoNode):
     ISO_code_name = StringProperty(choices=COUNTRIES, required=True)
     is_active = BooleanProperty(required=True)
     # language = StringProperty(max_length=100, required=True)
-    region = RelationshipTo("Region", "CONTAINS_REGION")
+    regions = RelationshipTo("Region", "CONTAINS_REGION")
 
 
 class Region(StructuredNode):  # example Malopolskie
@@ -284,6 +284,7 @@ class Region(StructuredNode):  # example Malopolskie
     name = StringProperty(max_length=100, required=False)  # region may not have english version of its name
     is_active = BooleanProperty(required=True)
     country = RelationshipFrom(Country, "CONTAINS_REGION")
+    cities = RelationshipTo("City", "CONTAINS CITY")
 
 
 class City(StructuredNode):
@@ -292,6 +293,7 @@ class City(StructuredNode):
     name = StringProperty(max_length=100)
     is_active = BooleanProperty(required=True)
     region = RelationshipFrom(Region, "CONTAINS CITY")
+    universities = RelationshipTo("University", "HOSTS_UNIVERSITY")
 
 
 class University(StructuredNode):  # example University of science and technology or Akademia Gorniczo Hutnicza
@@ -302,6 +304,7 @@ class University(StructuredNode):  # example University of science and technolog
     founding_year = IntegerProperty(required=False)
     city = RelationshipFrom(City, "HOSTS_UNIVERSITY")
     review = RelationshipFrom('Review', "reviews")
+    faculties = RelationshipTo("Faculty", "HAS_FACULTY")
 
 
 class Faculty(StructuredNode):  # example "wydzial fizyki i informatyki stosowanej"
@@ -310,6 +313,7 @@ class Faculty(StructuredNode):  # example "wydzial fizyki i informatyki stosowan
     is_active = BooleanProperty(default=True)
     university = RelationshipFrom(University, "HAS_FACULTY")
     review = RelationshipFrom('Review', "reviews")
+    specializations = RelationshipTo("Specialization", "HAS_SPECIALIZATION")
 
 
 class ScienceDomain(StructuredNode):  # example biology, computer science
@@ -339,8 +343,8 @@ class Specialization(StructuredNode):  # example "informatyka stosowana", "fizyk
     is_full_time = BooleanProperty(required=True)
     specialization_degree = IntegerProperty()  # 0 bachelor, 1 master, 2 doctor
     faculty = RelationshipFrom(Faculty, "HAS_SPECIALIZATION")
-    science_domain = RelationshipTo(ScienceDomain, "IS_PART_OF_DOMAIN")
-    course = RelationshipTo(Course, "HAS_COURSE")
+    science_domains = RelationshipTo(ScienceDomain, "IS_PART_OF_DOMAIN")
+    courses = RelationshipTo(Course, "HAS_COURSE")
     review = RelationshipFrom('Review', "reviews")
 
 

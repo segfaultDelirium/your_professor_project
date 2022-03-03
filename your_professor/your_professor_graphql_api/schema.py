@@ -1,21 +1,23 @@
 from ariadne import (QueryType, ObjectType,
                      gql, make_executable_schema)
 from ariadne.asgi import GraphQL
-from .models import *
-
-query = QueryType()
+from .resolvers import query, mutation, professor_course, professor
 
 type_defs = gql("""
     type Query{
         hello: String!
         country(local_language_name: String): Country
+        allRegions(amount: Int): [Region!]
+        region(uid: String): Region
+        allProfessors(amount: Int): [Professor!]!
+        allProfessorCourses(amount: Int): [ProfessorCourse!]!
     }
     type Country{
         uid: String!
         local_language_name: String!
         ISO_code_name: String!
         is_active: Boolean!
-        region: [Region!]!
+        regions(amount: Int): [Region!]!
     }
     
     type Region{
@@ -23,32 +25,90 @@ type_defs = gql("""
         local_language_name: String!
         name: String!
         is_active: Boolean!
+        cities: [City!]!
     }
+    
+    type City{
+        uid: String!
+        local_language_name: String!
+        name: String!
+        is_active: Boolean!
+        universities: [University!]!
+    }
+    
+    type University{
+        uid: String!
+        local_language_name: String!
+        name: String!
+        is_active: Boolean!
+        founding_year: Int
+        faculties: [Faculty!]!
+    }
+    
+    type Faculty{
+        uid: String!
+        name: String!
+        is_active: Boolean!
+        specializations: [Specialization!]!
+    }
+    
+    type ScienceDomain{
+        uid: String!
+        name: String!
+        name_in_polish: String
+        is_active: Boolean!
+    }
+    
+    type Course{
+        uid: String!
+        name: String!
+        is_active: Boolean!
+        lecture_hours_amount: Int!
+        exercises_hours_amount: Int!
+        has_exam: Boolean!
+        ECTS: Int!
+        is_obligatory: Boolean!
+        semester: Int!
+    }
+    
+    type Specialization{
+        uid: String!
+        name: String!
+        is_active: Boolean!
+        is_full_time: Boolean!
+        specialization_degree: Int!
+        science_domains: [ScienceDomain!]!
+        courses: [Course!]!
+    }
+    
+    type Professor{
+        uid: String
+        is_active: Boolean!
+        first_name: String!
+        last_name: String!
+        birth_year: Int
+        is_male: Boolean!
+        degree: String!
+    }
+    
+    type ProfessorCourse{
+        uid: String!
+        is_active: Boolean!
+        course: [Course!]!
+        professor: Professor!
+        is_professor_lecturer: Boolean!
+    }
+    
+    type Mutation{
+        updateRegion(uid: String!, 
+            local_language_name: String): Boolean!
+    }
+
+    
+    
 """)
 
-country = ObjectType("Country")
-
-@query.field("country")
-def resolve_country(_, info, local_language_name=None):
-    print(local_language_name)
-    if local_language_name:
-        return Country.nodes.get(local_language_name="Polska")
-    return Country.nodes.all()
-
-
-@country.field("region")
-def resolve_region(_, info):
-    return Region.nodes.all()
-
-
-@query.field("hello")
-def resolve_hello(_, info):  # root resolver
-    request = info.context["request"]
-    user_agent = request.headers.get("user-agent", "guest")
-    return "Hello... %s" % user_agent
-
-
-schema = make_executable_schema(type_defs, query)
+schema = make_executable_schema(type_defs, query, mutation, professor_course, professor)
 
 app = GraphQL(schema, debug=True)
 
