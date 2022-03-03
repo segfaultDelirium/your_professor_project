@@ -103,7 +103,9 @@ type_defs = gql("""
     type Mutation{
         updateRegion(uid: String!, 
             local_language_name: String = "",
-            name: String = ""): Boolean!
+            name: String = "", is_active: Boolean=None): Boolean!
+        connectRegionToCountry(uid: String!,
+            country_uid: String!): Boolean!
     }
 
     

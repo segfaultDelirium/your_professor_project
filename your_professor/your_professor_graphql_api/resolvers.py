@@ -4,6 +4,8 @@ from .models import *
 query = QueryType()
 
 country = ObjectType("Country")
+region = ObjectType("Region")
+professor = ObjectType("Professor")
 
 
 @query.field("country")
@@ -28,9 +30,6 @@ def resolve_all_regions(_, info, amount: int=-1):
     return Region.nodes.all()[amount:]
 
 
-region = ObjectType("Region")
-
-
 @query.field("region")
 def resolve_region(_, info, uid):
     if uid:
@@ -45,10 +44,6 @@ def resolve_region_country(obj, info):
     print("obj.country ", obj.country.all())
     # print("obj.country.local_language_name ",obj.country.local_language_name)
     return obj.country.all()[0]
-
-
-
-professor = ObjectType("Professor")
 
 
 @query.field("allProfessors")
@@ -94,8 +89,27 @@ mutation = MutationType()
 
 
 @mutation.field("updateRegion")
-def resolve_update_region(_, info, uid, local_language_name, name):
+def resolve_update_region(_, info, uid, local_language_name=None, name=None, is_active=None):
     print(uid)
-    print(local_language_name)
-    return False
+    try:
+        this_region = Region.nodes.get(uid=uid)
+        if local_language_name is None or local_language_name == "":
+            this_region.local_language_name = local_language_name
+        if name is None or name == "": this_region.name = name
+        if is_active is None: this_region.is_active = is_active
+        this_region.save()
+    except Region.DoesNotExist:
+        return False
 
+    return True
+
+
+@mutation.field("connectRegionToCountry")
+def resolve_connect_region_to_country(_, info, uid, country_uid):
+    try:
+        this_region = Region.nodes.get(uid=uid)
+        this_country = Country.nodes.get(uid=country_uid)
+        this_region.connect(this_country)
+    except Region.DoesNotExist or Country.DoesNotExist:
+        return False
+    return True
