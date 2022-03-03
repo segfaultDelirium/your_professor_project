@@ -1,7 +1,7 @@
 from ariadne import (QueryType, ObjectType,
                      gql, make_executable_schema)
 from ariadne.asgi import GraphQL
-from .resolvers import query, mutation, professor_course, professor
+from .resolvers import query, mutation, professor_course, professor, region
 
 type_defs = gql("""
     type Query{
@@ -25,6 +25,7 @@ type_defs = gql("""
         local_language_name: String!
         name: String!
         is_active: Boolean!
+        country: Country!
         cities: [City!]!
     }
     
@@ -101,14 +102,20 @@ type_defs = gql("""
     
     type Mutation{
         updateRegion(uid: String!, 
-            local_language_name: String): Boolean!
+            local_language_name: String = "",
+            name: String = ""): Boolean!
     }
 
     
     
 """)
 
-schema = make_executable_schema(type_defs, query, mutation, professor_course, professor)
+schema = make_executable_schema(type_defs,
+                                query,
+                                mutation,
+                                professor_course,
+                                professor,
+                                region)
 
 app = GraphQL(schema, debug=True)
 

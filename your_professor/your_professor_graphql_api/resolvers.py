@@ -27,11 +27,25 @@ def resolve_all_regions(_, info, amount: int=-1):
         return None
     return Region.nodes.all()[amount:]
 
-# @query.field("region")
-# def resolve_region(_, info, uid):
-#     if uid:
-#         return Region.nodes.get(uid=uid)
-#     return None
+
+region = ObjectType("Region")
+
+
+@query.field("region")
+def resolve_region(_, info, uid):
+    if uid:
+        return Region.nodes.get(uid=uid)
+    return None
+
+
+@region.field("country")
+def resolve_region_country(obj, info):
+    print("obj = ", obj)
+    print("info = ", info)
+    print("obj.country ", obj.country)
+    print("obj.country.local_language_name ",obj.country.local_language_name)
+    return None
+
 
 
 professor = ObjectType("Professor")
@@ -80,7 +94,7 @@ mutation = MutationType()
 
 
 @mutation.field("updateRegion")
-def resolve_update_region(_, info, uid, local_language_name):
+def resolve_update_region(_, info, uid, local_language_name, name):
     print(uid)
     print(local_language_name)
     return False
