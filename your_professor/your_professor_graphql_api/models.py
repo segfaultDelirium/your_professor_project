@@ -5,7 +5,8 @@ from django.db import models
 from django_neomodel import DjangoNode
 from neomodel import (config, StructuredNode, StringProperty, IntegerProperty,
                       UniqueIdProperty, RelationshipTo, RelationshipFrom, BooleanProperty,
-                      EmailProperty, DateTimeProperty, DateProperty, Relationship, StructuredRel)
+                      EmailProperty, DateTimeProperty, DateProperty, Relationship, StructuredRel,
+                      ZeroOrMore, One, ZeroOrOne, OneOrMore)
 
 
 # TODO add cardinality to models
@@ -275,7 +276,7 @@ class Country(DjangoNode):
     ISO_code_name = StringProperty(choices=COUNTRIES, required=True)
     is_active = BooleanProperty(required=True)
     # language = StringProperty(max_length=100, required=True)
-    regions = RelationshipTo("Region", "CONTAINS_REGION")
+    regions = RelationshipTo("Region", "CONTAINS_REGION", cardinality=ZeroOrMore)
 
 
 class Region(StructuredNode):  # example Malopolskie
@@ -283,8 +284,8 @@ class Region(StructuredNode):  # example Malopolskie
     local_language_name = StringProperty(max_length=100, required=True)
     name = StringProperty(max_length=100, required=False)  # region may not have english version of its name
     is_active = BooleanProperty(required=True)
-    country = RelationshipFrom(Country, "CONTAINS_REGION")
-    cities = RelationshipTo("City", "CONTAINS CITY")
+    country = RelationshipFrom(Country, "CONTAINS_REGION", cardinality=One)
+    cities = RelationshipTo("City", "CONTAINS CITY", cardinality=ZeroOrMore)
 
 
 class City(StructuredNode):
@@ -292,8 +293,8 @@ class City(StructuredNode):
     local_language_name = StringProperty(required=True)
     name = StringProperty(max_length=100)
     is_active = BooleanProperty(required=True)
-    region = RelationshipFrom(Region, "CONTAINS CITY")
-    universities = RelationshipTo("University", "HOSTS_UNIVERSITY")
+    region = RelationshipFrom(Region, "CONTAINS CITY", cardinality=One)
+    universities = RelationshipTo("University", "HOSTS_UNIVERSITY", cardinality=ZeroOrMore)
 
 
 class University(StructuredNode):  # example University of science and technology or Akademia Gorniczo Hutnicza
@@ -302,18 +303,18 @@ class University(StructuredNode):  # example University of science and technolog
     name = StringProperty(max_length=100)
     is_active = BooleanProperty(default=True)
     founding_year = IntegerProperty(required=False)
-    city = RelationshipFrom(City, "HOSTS_UNIVERSITY")
-    review = RelationshipFrom('Review', "reviews")
-    faculties = RelationshipTo("Faculty", "HAS_FACULTY")
+    city = RelationshipFrom(City, "HOSTS_UNIVERSITY", cardinality=One)
+    review = RelationshipFrom('Review', "reviews", cardinality=ZeroOrMore)
+    faculties = RelationshipTo("Faculty", "HAS_FACULTY", cardinality=ZeroOrMore)
 
 
 class Faculty(StructuredNode):  # example "wydzial fizyki i informatyki stosowanej"
     uid = UniqueIdProperty()
     name = StringProperty(max_length=100)
     is_active = BooleanProperty(default=True)
-    university = RelationshipFrom(University, "HAS_FACULTY")
-    review = RelationshipFrom('Review', "reviews")
-    specializations = RelationshipTo("Specialization", "HAS_SPECIALIZATION")
+    university = RelationshipFrom(University, "HAS_FACULTY", cardinality=One)
+    review = RelationshipFrom('Review', "reviews", cardinality=ZeroOrMore)
+    specializations = RelationshipTo("Specialization", "HAS_SPECIALIZATION", cardinality=ZeroOrMore)
 
 
 class ScienceDomain(StructuredNode):  # example biology, computer science
@@ -333,7 +334,7 @@ class Course(StructuredNode):  # example "Python in the enterprise" or "Bazy dan
     ECTS = IntegerProperty()
     is_obligatory = BooleanProperty()
     semester = IntegerProperty()
-    review = RelationshipFrom('Review', "reviews")
+    review = RelationshipFrom('Review', "reviews", cardinality=ZeroOrMore)
 
 
 class Specialization(StructuredNode):  # example "informatyka stosowana", "fizyka medyczna"
@@ -342,10 +343,10 @@ class Specialization(StructuredNode):  # example "informatyka stosowana", "fizyk
     is_active = BooleanProperty(default=True)
     is_full_time = BooleanProperty(required=True)
     specialization_degree = IntegerProperty()  # 0 bachelor, 1 master, 2 doctor
-    faculty = RelationshipFrom(Faculty, "HAS_SPECIALIZATION")
-    science_domains = RelationshipTo(ScienceDomain, "IS_PART_OF_DOMAIN")
-    courses = RelationshipTo(Course, "HAS_COURSE")
-    review = RelationshipFrom('Review', "reviews")
+    faculty = RelationshipFrom(Faculty, "HAS_SPECIALIZATION", cardinality=One)
+    science_domains = RelationshipTo(ScienceDomain, "IS_PART_OF_DOMAIN", cardinality=ZeroOrMore)
+    courses = RelationshipTo(Course, "HAS_COURSE", cardinality=ZeroOrMore)
+    review = RelationshipFrom('Review', "reviews", cardinality=ZeroOrMore)
 
 
 class Professor(StructuredNode):
@@ -362,8 +363,8 @@ class Professor(StructuredNode):
 class ProfessorCourse(StructuredNode):
     uid = UniqueIdProperty()
     is_active = BooleanProperty(default=True)
-    course = RelationshipFrom(Course, "IS_TAUGHT_BY")
-    professor = RelationshipFrom(Professor, "TEACHES")
+    course = RelationshipFrom(Course, "IS_TAUGHT_BY", cardinality=One)
+    professor = RelationshipFrom(Professor, "TEACHES", cardinality=One)
     is_professor_lecturer = BooleanProperty(required=True)
     review = RelationshipFrom('Review', "reviews")
 
@@ -386,10 +387,10 @@ class User(StructuredNode):
     last_name = StringProperty(max_length=100)
     date_joined = DateTimeProperty(default_now=True)
     birthday = DateProperty()
-    course = RelationshipTo(ProfessorCourse, "TAKES_PART_IN")
-    specialization = RelationshipTo(Specialization, "STUDIES")
-    reactsToReview = RelationshipTo('Review', "REACTS_TO", model=ReactsTo)
-    reactsToReply = RelationshipTo('Reply', "REACTS_TO", model=ReactsTo)
+    course = RelationshipTo(ProfessorCourse, "TAKES_PART_IN", cardinality=ZeroOrMore)
+    specialization = RelationshipTo(Specialization, "STUDIES", cardinality=ZeroOrMore)
+    reactsToReview = RelationshipTo('Review', "REACTS_TO", model=ReactsTo, cardinality=ZeroOrMore)
+    reactsToReply = RelationshipTo('Reply', "REACTS_TO", model=ReactsTo, cardinality=ZeroOrMore)
 
 
 class Tag(StructuredNode):
@@ -405,11 +406,11 @@ class Review(StructuredNode):
     quality = StringProperty(choices=QUALITY, required=True)
     DIFFICULTY = {1: "Very difficult", 2: "difficult", 3: "moderate", 4: "easy", 5: "very easy"}
     difficulty = StringProperty(choices=DIFFICULTY, required=False)
-    author = RelationshipFrom(User, "CREATED_REVIEW")
+    author = RelationshipFrom(User, "CREATED_REVIEW", cardinality=One)
     # if by mistake you put a `required=True` as argument to RelationshipFrom,
     # it will throw exception `neomodel.exceptions.NodeClassAlreadyDefined: <exception str() failed>`
     # instead use cardinality
-    tag = RelationshipTo(Tag, "IS_TAGGED")
+    tag = RelationshipTo(Tag, "IS_TAGGED", cardinality=ZeroOrMore)
     creation_date = DateTimeProperty(default_now=True)
     most_recent_edit_date = DateTimeProperty()
 
@@ -418,11 +419,17 @@ class Reply(StructuredNode):
     uid = UniqueIdProperty()
     is_text_visible = BooleanProperty(required=True)
     text = StringProperty(max_length=3000)
-    author = RelationshipFrom(User, "CREATED_REPLY")
-    replies_to_review = RelationshipTo(Review, "REPLIES_TO")
-    replies_to_reply = RelationshipTo("Reply", "REPLIES_TO")
+    author = RelationshipFrom(User, "CREATED_REPLY", cardinality=One)
     creation_date = DateTimeProperty(default_now=True)
     most_recent_edit_date = DateTimeProperty()
+
+
+class ReviewReply(Reply):
+    replies_to_review = RelationshipTo(Review, "REPLIES_TO", cardinality=ZeroOrOne)
+
+
+class ReplyReply(Reply):
+    replies_to_reply = RelationshipTo("Reply", "REPLIES_TO", cardinality=ZeroOrOne)
 
 
 #

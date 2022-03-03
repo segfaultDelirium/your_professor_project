@@ -42,9 +42,9 @@ def resolve_region(_, info, uid):
 def resolve_region_country(obj, info):
     print("obj = ", obj)
     print("info = ", info)
-    print("obj.country ", obj.country)
-    print("obj.country.local_language_name ",obj.country.local_language_name)
-    return None
+    print("obj.country ", obj.country.all())
+    # print("obj.country.local_language_name ",obj.country.local_language_name)
+    return obj.country.all()[0]
 
 
 
