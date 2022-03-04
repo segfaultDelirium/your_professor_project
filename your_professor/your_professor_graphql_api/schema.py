@@ -1,7 +1,8 @@
 from ariadne import (QueryType, ObjectType,
                      gql, make_executable_schema)
 from ariadne.asgi import GraphQL
-from .resolvers import query, mutation, professor_course, professor, region
+from .resolvers import query, professor_course, professor, region
+from .mutation_resolvers.mutation_resolvers import mutation
 
 type_defs = gql("""
     type Query{
@@ -101,21 +102,39 @@ type_defs = gql("""
     }
     
     type Mutation{
-        createCountryByISO(local_language_name: String!, ISO_code_name: String!): MutationPayload!
+        createCountryByISO(local_language_name: String!,
+            ISO_code_name: String!): MutationPayloadCountry!
         updateCountry(uid: String!, 
             local_language_name: String = "", 
             ISO_code_name: String = "", 
-            is_active:Boolean = None): MutationPayload!
+            is_active:Boolean = None): MutationPayloadCountry!
+        deleteCountry(uid: String!): MutationPayload!
+        createRegion(local_language_name: String!,
+            name: String = "",
+            uid_country: String!): MutationPayloadRegion!
         updateRegion(uid: String!, 
             local_language_name: String = "",
             name: String = "", 
             is_active: Boolean=None): Boolean!
-        reconnectRegionToCountry(uid: String!, country_uid: String!): MutationPayload!
+        reconnectRegionToCountry(uid: String!,
+            country_uid: String!): MutationPayload!
     }
     
     type MutationPayload{
         status: Boolean!
         error: String
+    }
+    
+    type MutationPayloadCountry{
+        status: Boolean!
+        error: String
+        country: Country
+    }
+    
+    type MutationPayloadRegion{
+        status: Boolean!
+        error: String
+        region: Region
     }
 
     
