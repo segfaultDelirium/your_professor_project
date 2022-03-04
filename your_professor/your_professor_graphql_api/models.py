@@ -292,7 +292,7 @@ class City(StructuredNode):
     uid = UniqueIdProperty()
     local_language_name = StringProperty(required=True)
     name = StringProperty(max_length=100)
-    is_active = BooleanProperty(required=True)
+    is_active = BooleanProperty(default=True)
     region = RelationshipFrom(Region, "CONTAINS CITY", cardinality=One)
     universities = RelationshipTo("University", "HOSTS_UNIVERSITY", cardinality=ZeroOrMore)
 

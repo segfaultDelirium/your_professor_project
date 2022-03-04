@@ -109,17 +109,33 @@ type_defs = gql("""
             ISO_code_name: String = "", 
             is_active:Boolean = None): MutationPayloadCountry!
         deleteCountry(uid: String!, force: Boolean = False): MutationPayload!
+        
         createRegion(local_language_name: String!,
             name: String = "",
             uid_country: String!): MutationPayloadRegion!
         updateRegion(uid: String!, 
             local_language_name: String = "",
             name: String = "", 
-            is_active: Boolean=None): Boolean!
+            is_active: Boolean=None,
+            uid_country: String = ""): Boolean!
         deleteRegion(uid: String!, force: Boolean = False): MutationPayload!
-        connectRegionToCountry(uid: String!, uid_country: String!): MutationPayloadRegion!
-        reconnectRegionToCountry(uid: String!,
-            uid_country: String!): MutationPayload!
+        
+        createCity(local_language_name: String!,
+            name: String = "",
+            is_active: Boolean = None,
+            uid_region: String!): MutationPayloadCity!
+        updateCity(uid: String!,
+            local_language_name: String = "",
+            name: String = "",
+            is_active: Boolean = None,
+            uid_region: String = ""): MutationPayloadCity!
+        deleteCity(uid: String!, is_active: Boolean = False): MutationPayload
+        
+        createUniversity(local_language_name: String!,
+            name: String,
+            is_active: Boolean,
+            founding_year: Int,
+            uid_city: String!): MutationPayloadUniversity
     }
     
     type MutationPayload{
@@ -138,7 +154,18 @@ type_defs = gql("""
         error: String
         region: Region
     }
-
+    
+    type MutationPayloadCity{
+        status: Boolean!
+        error: String
+        city: City
+    }
+    
+    type MutationPayloadUniversity{
+        status: Boolean!
+        error: String
+        university: University
+    }
     
     
 """)

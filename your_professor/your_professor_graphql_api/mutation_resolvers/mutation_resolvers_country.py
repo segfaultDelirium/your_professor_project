@@ -13,10 +13,10 @@ def resolve_create_country_by_ISO(_, info, local_language_name: str, ISO_code_na
         pass
     try:
         new_country = Country(local_language_name=local_language_name, ISO_code_name=ISO_code_name).save()
-        create_mutation_payload_country(True, country=new_country)
+        return create_mutation_payload_country(True, country=new_country)
     except Exception as e:
         print(e)
-        create_mutation_payload(False, error="Sum ting Wong")
+        return create_mutation_payload(False, error="Sum ting Wong")
 
 
 def resolve_update_country(_, info, uid: str, local_language_name: str, ISO_code_name: str, is_active: bool):
