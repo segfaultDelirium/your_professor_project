@@ -108,7 +108,7 @@ type_defs = gql("""
             local_language_name: String = "", 
             ISO_code_name: String = "", 
             is_active:Boolean = None): MutationPayloadCountry!
-        deleteCountry(uid: String!): MutationPayload!
+        deleteCountry(uid: String!, force: Boolean = False): MutationPayload!
         createRegion(local_language_name: String!,
             name: String = "",
             uid_country: String!): MutationPayloadRegion!
@@ -116,8 +116,10 @@ type_defs = gql("""
             local_language_name: String = "",
             name: String = "", 
             is_active: Boolean=None): Boolean!
+        deleteRegion(uid: String!, force: Boolean = False): MutationPayload!
+        connectRegionToCountry(uid: String!, uid_country: String!): MutationPayloadRegion!
         reconnectRegionToCountry(uid: String!,
-            country_uid: String!): MutationPayload!
+            uid_country: String!): MutationPayload!
     }
     
     type MutationPayload{

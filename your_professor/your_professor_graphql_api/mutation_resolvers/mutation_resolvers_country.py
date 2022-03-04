@@ -16,7 +16,7 @@ def resolve_create_country_by_ISO(_, info, local_language_name: str, ISO_code_na
         create_mutation_payload_country(True, country=new_country)
     except Exception as e:
         print(e)
-        create_mutation_payload(False, error = "Sum ting Wong")
+        create_mutation_payload(False, error="Sum ting Wong")
 
 
 def resolve_update_country(_, info, uid: str, local_language_name: str, ISO_code_name: str, is_active: bool):
@@ -35,13 +35,14 @@ def resolve_update_country(_, info, uid: str, local_language_name: str, ISO_code
     return create_mutation_payload_country(True, country=this_country)
 
 
-def resolve_delete_country(_, info, uid: str):
+def resolve_delete_country(_, info, uid: str, force: bool = False):
     try:
         this_country = Country.nodes.get(uid=uid)
-        if len(this_country.regions.all()) != 0:
-            return create_mutation_payload(False, "Country you are trying to delete has regions attached")
+        if not force and len(this_country.regions.all()) != 0:
+            return create_mutation_payload(False,
+                                           "Country you are trying to delete has regions attached, "
+                                           "please disconnect them before deleting Country.")
         this_country.delete()
         return create_mutation_payload(True)
     except Country.DoesNotExist:
         return create_mutation_payload(False, "Country you are trying to delete does not exist")
-
