@@ -274,7 +274,7 @@ class Country(DjangoNode):
     uid = UniqueIdProperty()
     local_language_name = StringProperty(required=True)
     ISO_code_name = StringProperty(choices=COUNTRIES, required=True)
-    is_active = BooleanProperty(required=True)
+    is_active = BooleanProperty(default=True)
     # language = StringProperty(max_length=100, required=True)
     regions = RelationshipTo("Region", "CONTAINS_REGION", cardinality=ZeroOrMore)
 
@@ -283,8 +283,8 @@ class Region(StructuredNode):  # example Malopolskie
     uid = UniqueIdProperty()
     local_language_name = StringProperty(max_length=100, required=True)
     name = StringProperty(max_length=100, required=False)  # region may not have english version of its name
-    is_active = BooleanProperty(required=True)
-    country = RelationshipFrom(Country, "CONTAINS_REGION", cardinality=One)
+    is_active = BooleanProperty(default=True)
+    country = RelationshipFrom(Country, "CONTAINS_REGION", cardinality=ZeroOrOne)
     cities = RelationshipTo("City", "CONTAINS CITY", cardinality=ZeroOrMore)
 
 

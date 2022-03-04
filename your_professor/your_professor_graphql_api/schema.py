@@ -101,11 +101,21 @@ type_defs = gql("""
     }
     
     type Mutation{
+        createCountryByISO(local_language_name: String!, ISO_code_name: String!): MutationPayload!
+        updateCountry(uid: String!, 
+            local_language_name: String = "", 
+            ISO_code_name: String = "", 
+            is_active:Boolean = None): MutationPayload!
         updateRegion(uid: String!, 
             local_language_name: String = "",
-            name: String = "", is_active: Boolean=None): Boolean!
-        connectRegionToCountry(uid: String!,
-            country_uid: String!): Boolean!
+            name: String = "", 
+            is_active: Boolean=None): Boolean!
+        reconnectRegionToCountry(uid: String!, country_uid: String!): MutationPayload!
+    }
+    
+    type MutationPayload{
+        status: Boolean!
+        error: String
     }
 
     

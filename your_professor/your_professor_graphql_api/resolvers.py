@@ -1,3 +1,4 @@
+import neomodel.exceptions
 from ariadne import (QueryType, ObjectType, MutationType)
 from .models import *
 
@@ -104,12 +105,71 @@ def resolve_update_region(_, info, uid, local_language_name=None, name=None, is_
     return True
 
 
-@mutation.field("connectRegionToCountry")
-def resolve_connect_region_to_country(_, info, uid, country_uid):
+# @mutation.field("connectRegionToCountry")
+# def resolve_connect_region_to_country(_, info, uid, country_uid):
+#     try:
+#         this_region = Region.nodes.get(uid=uid)
+#         this_country = Country.nodes.get(uid=country_uid)
+#         this_region.country.connect(this_country)
+#     except Region.DoesNotExist:
+#         return {"status": False, "error": f"Region of {uid=} does not exist."}
+#     except Country.DoesNotExist:
+#         return {"status": False, "error": f"Country of {country_uid=} does not exist."}
+#     except neomodel.exceptions.AttemptedCardinalityViolation as ACV:
+#         return {"status": False, "error": f"Region can only be connected to one Country."}
+#     this_region.save()
+#     return {"status": True}
+
+
+@mutation.field("reconnectRegionToCountry")
+def resolve_reconnect_region_to_country(_, info, uid, country_uid):
     try:
         this_region = Region.nodes.get(uid=uid)
         this_country = Country.nodes.get(uid=country_uid)
-        this_region.connect(this_country)
-    except Region.DoesNotExist or Country.DoesNotExist:
-        return False
-    return True
+        if this_country != this_region.country.all()[0]: this_region.country.reconnect(this_country)
+    except Region.DoesNotExist:
+        return {"status": False, "error": f"Region of {uid=} does not exist."}
+    this_region.save()
+    return {"status": True}
+
+
+@mutation.field("createCountryByISO")
+def resolve_create_country_by_ISO(_, info, local_language_name: str, ISO_code_name: str):
+    if COUNTRIES.get(ISO_code_name) is None:
+        return create_mutation_payload(False, "Incorrect ISO code")
+    print(COUNTRIES.get(ISO_code_name))
+    try:
+        probing_country = Country.nodes.get(ISO_code_name=ISO_code_name)
+        return create_mutation_payload(False, "Country with this ISO code already exist")
+    except Country.DoesNotExist as e:
+        pass
+    try:
+        new_country = Country(local_language_name=local_language_name, ISO_code_name=ISO_code_name).save()
+        return {"status": True}
+    except Exception as e:
+        print(e)
+        return {"status": False, "error": "Sum ting Wong"}
+
+
+@mutation.field("updateCountry")
+def resolve_update_country(_, info, uid: str, local_language_name: str, ISO_code_name: str, is_active: bool):
+    print(uid)
+    try:
+        this_country = Country.nodes.get(uid=uid)
+        if local_language_name is None or local_language_name == "":
+            this_country.local_language_name = local_language_name
+        if ISO_code_name is None or ISO_code_name == "": this_country.ISO_code_name = ISO_code_name
+        if is_active is None: this_country.is_active = is_active
+        this_country.save()
+    except Region.DoesNotExist:
+        return create_mutation_payload(False, "Country you are trying to modify does not exist")
+
+    return create_mutation_payload(True)
+
+
+
+def create_mutation_payload(status: bool, error: str = None):
+    return {
+        "status": status,
+        "error": error
+    }
