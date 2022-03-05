@@ -5,7 +5,9 @@ from .mutation_resolvers_country import (resolve_create_country_by_ISO,
                                          resolve_update_country, resolve_delete_country)
 from .mutation_resolvers_course import resolve_create_course, resolve_delete_course, resolve_update_course
 from .mutation_resolvers_faculty import resolve_create_faculty, resolve_update_faculty, resolve_delete_faculty
-from .mutation_resolvers_professor import resolve_create_professor, resolve_delete_professor, resolve_update_professor
+from .mutation_resolvers_professor import resolve_create_professor, resolve_delete_professor, resolve_update_professor, \
+    resolve_connect_professor_to_professor_course, resolve_reconnect_professor_to_professor_course, \
+    resolve_disconnect_professor_from_professor_course
 from .mutation_resolvers_professor_course import resolve_create_professor_course, resolve_update_professor_course, \
     resolve_delete_professor_course
 from .mutation_resolvers_region import (resolve_update_region, resolve_create_region, resolve_delete_region)
@@ -49,4 +51,7 @@ mutation.set_field("deleteProfessorCourse", resolve_delete_professor_course)
 
 mutation.set_field("createProfessor", resolve_create_professor)
 mutation.set_field("updateProfessor", resolve_update_professor)
+mutation.set_field("connectProfessorToProfessorCourse", resolve_connect_professor_to_professor_course)
+mutation.set_field("reconnectProfessorToProfessorCourse", resolve_reconnect_professor_to_professor_course)
+mutation.set_field("disconnectProfessorFromProfessorCourse", resolve_disconnect_professor_from_professor_course)
 mutation.set_field("deleteProfessor", resolve_delete_professor)
