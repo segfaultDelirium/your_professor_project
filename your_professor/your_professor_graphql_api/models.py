@@ -324,6 +324,18 @@ class ScienceDomain(StructuredNode):  # example biology, computer science
     is_active = BooleanProperty(default=True)
 
 
+class Specialization(StructuredNode):  # example "informatyka stosowana", "fizyka medyczna"
+    uid = UniqueIdProperty()
+    name = StringProperty(max_length=100)
+    is_active = BooleanProperty(default=True)
+    is_full_time = BooleanProperty(required=True)
+    specialization_degree = IntegerProperty()  # 0 bachelor, 1 master, 2 doctor
+    faculty = RelationshipFrom(Faculty, "HAS_SPECIALIZATION", cardinality=One)
+    science_domains = RelationshipTo(ScienceDomain, "IS_PART_OF_DOMAIN", cardinality=ZeroOrMore)
+    courses = RelationshipTo("Course", "HAS_COURSE", cardinality=ZeroOrMore)
+    review = RelationshipFrom('Review', "reviews", cardinality=ZeroOrMore)
+
+
 class Course(StructuredNode):  # example "Python in the enterprise" or "Bazy danych 1"
     uid = UniqueIdProperty()
     name = StringProperty(max_length=100)
@@ -335,19 +347,8 @@ class Course(StructuredNode):  # example "Python in the enterprise" or "Bazy dan
     is_obligatory = BooleanProperty()
     semester = IntegerProperty()
     review = RelationshipFrom('Review', "reviews", cardinality=ZeroOrMore)
-
-
-class Specialization(StructuredNode):  # example "informatyka stosowana", "fizyka medyczna"
-    uid = UniqueIdProperty()
-    name = StringProperty(max_length=100)
-    is_active = BooleanProperty(default=True)
-    is_full_time = BooleanProperty(required=True)
-    specialization_degree = IntegerProperty()  # 0 bachelor, 1 master, 2 doctor
-    faculty = RelationshipFrom(Faculty, "HAS_SPECIALIZATION", cardinality=One)
-    science_domains = RelationshipTo(ScienceDomain, "IS_PART_OF_DOMAIN", cardinality=ZeroOrMore)
-    courses = RelationshipTo(Course, "HAS_COURSE", cardinality=ZeroOrMore)
-    review = RelationshipFrom('Review', "reviews", cardinality=ZeroOrMore)
-
+    specialization = RelationshipFrom(Specialization, "HAS_COURSE", cardinality=OneOrMore)
+    professor_course = RelationshipTo("ProfessorCourse", "IS_TAUGHT_BY")
 
 class Professor(StructuredNode):
     uid = UniqueIdProperty()

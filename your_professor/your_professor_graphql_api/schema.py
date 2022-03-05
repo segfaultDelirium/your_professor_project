@@ -155,6 +155,15 @@ type_defs = gql("""
             specialization_degree: Int, uid_faculty: String): MutationPayloadSpecialization!
         deleteSpecialization(uid: String!, force: Boolean = False): MutationPayload!
         
+        createCourse(name: String!, is_active: Boolean = None, lecture_hours_amount: Int!, 
+            exercises_hours_amount: Int!, has_exam: Boolean!, ECTS: Int!, is_obligatory: Boolean!, semester: Int!,
+             uid_specialization: String!): MutationPayloadCourse! 
+        updateCourse(uid: String!, name: String = None, is_active: Boolean = None, lecture_hours_amount: Int = None, 
+            exercises_hours_amount: Int = None, has_exam: Boolean = None, ECTS: Int = None, 
+            is_obligatory: Boolean = None, semester: Int = None, 
+            uid_specialization: String = None): MutationPayloadCourse!
+        deleteCourse(uid: String!, force: Boolean = False): MutationPayload!
+        
     }
     
     type MutationPayload{
@@ -196,6 +205,12 @@ type_defs = gql("""
         status: Boolean!
         error: String
         specialization: Specialization
+    }
+    
+    type MutationPayloadCourse{
+        status: Boolean!
+        error: String
+        course: Course
     }
     
     
