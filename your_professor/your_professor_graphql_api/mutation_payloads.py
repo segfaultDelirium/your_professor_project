@@ -1,4 +1,4 @@
-from .models import Country, Region, City, University, Faculty, Specialization, Course
+from .models import Country, Region, City, University, Faculty, Specialization, Course, ProfessorCourse, Professor
 
 
 def create_mutation_payload(status: bool, error: str = None, data_type: str = None, data = None):
@@ -40,3 +40,11 @@ def create_mutation_payload_specialization(status: bool, error: str = None, spec
 
 def create_mutation_payload_course(status: bool, error: str = None, course: Course = None):
     return create_mutation_payload(status, error, "course", course)
+
+
+def create_mutation_payload_professor_course(status: bool, error: str = None, professor_course: ProfessorCourse = None):
+    return create_mutation_payload(status, error, "professor_course", professor_course)
+
+
+def create_mutation_payload_professor(status: bool, error: str = None, professor: Professor = None):
+    return create_mutation_payload(status, error, "professor", professor)

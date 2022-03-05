@@ -96,7 +96,7 @@ type_defs = gql("""
     type ProfessorCourse{
         uid: String!
         is_active: Boolean!
-        course: [Course!]!
+        course: Course!
         professor: Professor!
         is_professor_lecturer: Boolean!
     }
@@ -164,6 +164,23 @@ type_defs = gql("""
             uid_specialization: String = None): MutationPayloadCourse!
         deleteCourse(uid: String!, force: Boolean = False): MutationPayload!
         
+        createProfessorCourse(is_active: Boolean = None, uid_course: String!, uid_professor: String = None,
+            is_professor_lecturer: Boolean!): MutationPayloadProfessorCourse! 
+        updateProfessorCourse(uid: String!, is_active: Boolean = None, uid_course: String = None, 
+            uid_professor: String = None, is_professor_lecturer: Boolean = None): MutationPayloadProfessorCourse!
+        deleteProfessorCourse(uid: String!, force: Boolean = False): MutationPayload!
+        
+        createProfessor(first_name: String!, last_name: String!, is_active: Boolean = None, birth_year: Int = None, 
+            is_male: Boolean!, degree: String!, uid_professor_course: String = None): MutationPayloadProfessor!
+        updateProfessor(uid: String!, is_active: Boolean = None, first_name: String = None, last_name: String = None, 
+            birth_year: Int = None, is_male: Boolean = None, degree: String!, 
+            uid_professor_course: String = None): MutationPayloadProfessor!
+        connectProfessorToProfessorCourse(uid: String!, uid_professor_course: String!): MutationPayloadProfessor!
+        reconnectProfessorToProfessorCourse(uid: String!, uid_old_professor_course: String!, 
+            uid_new_professor_course: String!): MutationPayloadProfessor!
+        disconnectProfessorFromProfessorCourse(uid: String!, uid_professor_course: String!): MutationPayloadProfessor!
+        deleteProfessor(uid: String!): MutationPayload!
+        
     }
     
     type MutationPayload{
@@ -211,6 +228,18 @@ type_defs = gql("""
         status: Boolean!
         error: String
         course: Course
+    }
+    
+    type MutationPayloadProfessorCourse{
+        status: Boolean!
+        error: String
+        professor_course: ProfessorCourse
+    }
+    
+    type MutationPayloadProfessor{
+        status: Boolean!
+        error: String
+        professor: Professor
     }
     
     

@@ -51,6 +51,7 @@ def resolve_update_course(_, info, uid, name: str, is_active: bool = None, lectu
         if semester is not None:
             course.semester = semester
         course.save()
+        # TODO take into consideration that course can belong to many specializations
         if uid_specialization is not None:
             specialization = Specialization.nodes.get(uid=uid_specialization)
             old_specialization = course.specialization.all()[0]
