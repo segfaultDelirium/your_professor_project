@@ -1,0 +1,6 @@
+graphql errors explanation:
+
+"Variable '$uid' of required type 'String!' was not provided.":
+    you probably forgot a comma `,` or have comma after last variable
+    in query variables list
+	

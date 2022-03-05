@@ -7,7 +7,7 @@ def resolve_create_city(_, info, local_language_name: str, name: str, uid_region
     try:
         probing_city = City.nodes.get(local_language_name=local_language_name)
         return create_mutation_payload_city(False,
-                                            "Region of this local language name already exist.",
+                                            "City of this local language name already exist.",
                                             city=probing_city)
     except City.DoesNotExist as e:
         pass
@@ -63,30 +63,3 @@ def resolve_delete_city(_, info, uid: str, force: bool = False):
         return create_mutation_payload(True)
     except City.DoesNotExist:
         return create_mutation_payload(False, "City you are trying to delete does not exist")
-
-
-# def resolve_connect_region_to_country(_, info, uid, uid_country):
-#     try:
-#         this_region = Region.nodes.get(uid=uid)
-#         this_country = Country.nodes.get(uid=uid_country)
-#         this_region.country.connect(this_country)
-#     except Region.DoesNotExist:
-#         return create_mutation_payload(False, f"Region of {uid=} does not exist.")
-#     except Country.DoesNotExist:
-#         return create_mutation_payload(False, f"Country of {uid_country=} does not exist.")
-#     except AttemptedCardinalityViolation as ACV:
-#         return create_mutation_payload(False, f"Region can only be connected to one Country.")
-#     this_region.save()
-#     return create_mutation_payload_region(True, region=this_region)
-#
-#
-# def resolve_reconnect_region_to_country(_, info, uid, uid_country):
-#     try:
-#         this_region = Region.nodes.get(uid=uid)
-#         this_country = Country.nodes.get(uid=uid_country)
-#         if this_country != this_region.country.all()[0]:
-#             this_region.country.reconnect(this_region.country.all()[0], this_country)
-#     except Region.DoesNotExist:
-#         return create_mutation_payload(False, f"Region of {uid=} does not exist.")
-#     this_region.save()
-#     return create_mutation_payload_region(True, region=this_region)

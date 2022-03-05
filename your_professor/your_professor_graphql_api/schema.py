@@ -128,14 +128,22 @@ type_defs = gql("""
             local_language_name: String = "",
             name: String = "",
             is_active: Boolean = None,
-            uid_region: String = ""): MutationPayloadCity!
-        deleteCity(uid: String!, is_active: Boolean = False): MutationPayload
+            uid_region: String = None): MutationPayloadCity!
+        deleteCity(uid: String!, force: Boolean = False): MutationPayload
         
         createUniversity(local_language_name: String!,
             name: String,
-            is_active: Boolean,
-            founding_year: Int,
+            is_active: Boolean = None,
+            founding_year: Int = None,
             uid_city: String!): MutationPayloadUniversity
+        updateUniversity(uid: String!,
+            local_language_name: String = None,
+            name: String = None,
+            is_active: Boolean = None,
+            founding_year: Int = None,
+            uid_city: String = None): MutationPayloadUniversity
+        deleteUniversity(uid: String!, force: Boolean = False): MutationPayload
+        
     }
     
     type MutationPayload{
