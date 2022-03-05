@@ -188,11 +188,5 @@ class ReplyReply(Reply):
 # class Country(StructuredNode):
 #     code = StringProperty(unique_index=True, required=True)
 
-
-class Person(StructuredNode):
-    uuid = UniqueIdProperty()
-    name = StringProperty(unique_index=True)
-    age = IntegerProperty(index=True, default=0)
-
-    # traverse outgoing IS_FROM relations, inflate to Country objects
-    # country = RelationshipTo(Country, 'IS_FROM')
+# traverse outgoing IS_FROM relations, inflate to Country objects
+# country = RelationshipTo(Country, 'IS_FROM')

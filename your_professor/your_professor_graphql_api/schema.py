@@ -8,6 +8,7 @@ type_defs = gql("""
     type Query{
         hello: String!
         country(local_language_name: String): Country
+        allCountries(amount: Int): [Country!]!
         allRegions(amount: Int): [Region!]
         region(uid: String): Region
         allProfessors(amount: Int): [Professor!]!
@@ -101,6 +102,38 @@ type_defs = gql("""
         is_professor_lecturer: Boolean!
     }
     
+    type Date{
+        year: Int!
+        month: Int!
+        day: Int!
+    }
+    
+    type Time{
+        hour: Int!
+        minute: Int!
+        second: Int!
+    }
+    
+    type DateTime{
+        date: Date!
+        time: Time!
+    }
+    
+    # type User{
+    #     uid: String!
+    #     is_active: Boolean!
+    #     username: String!
+    #     email_address: String
+    #     is_staff: Boolean!
+    #     is_super_user: Boolean!
+    #     first_name: String
+    #     last_name: String
+    #     date_joined: DateTime
+    #     birthday: Date
+    #     courses: [Course!]
+    #     specializations: [Specialization!]
+    # }
+    
     type Mutation{
         createCountryByISO(local_language_name: String!,
             ISO_code_name: String!): MutationPayloadCountry!
@@ -181,6 +214,11 @@ type_defs = gql("""
         disconnectProfessorFromProfessorCourse(uid: String!, uid_professor_course: String!): MutationPayloadProfessor!
         deleteProfessor(uid: String!): MutationPayload!
         
+        # createUser(is_active: Boolean, username: String!, password: String!, email_address: String, is_staff: Boolean, 
+        #     is_super_user: String, first_name: String, last_name: String, birthday: DateTime): MutationPayloadUser!
+        # updateUser(uid: String!): MutationPayloadUser!
+        # deleteUser(uid: String!): MutationPayload!
+        
     }
     
     type MutationPayload{
@@ -241,6 +279,12 @@ type_defs = gql("""
         error: String
         professor: Professor
     }
+    
+    # type MutationPayloadUser{
+    #     status: Boolean!
+    #     error: String
+    #     user: User
+    # }
     
     
 """)

@@ -19,15 +19,20 @@ def resolve_country(_, info, local_language_name=None):
     return None
 
 
+@query.field("allCountries")
+def resolve_all_countries(_, info, amount: int = None):
+    if amount is None or amount >= len(Region.nodes):
+        return Country.nodes.all()
+    return Country.nodes.all()[:amount]
+
+
 @country.field("regions") # the amount argument does not work for country query idk why
 @query.field("allRegions")
-def resolve_all_regions(_, info, amount: int=-1):
+def resolve_all_regions(_, info, amount: int = None):
     print("in resolve_all_regions, amount = ", amount)
-    if amount == -1 or amount >= len(Region.nodes):
+    if amount is None or amount >= len(Region.nodes):
         return Region.nodes.all()
-    if amount == 0:
-        return None
-    return Region.nodes.all()[amount:]
+    return Region.nodes.all()[:amount]
 
 
 @query.field("region")
@@ -53,7 +58,7 @@ def resolve_all_professors(_, info, amount: int=-1):
         return Professor.nodes.all()
     if amount == 0:
         return None
-    return Professor.nodes.all()[amount:]
+    return Professor.nodes.all()[:amount]
 
 
 @professor_course.field("professor")
@@ -72,7 +77,7 @@ def resolve_all_professor_courses(_, info, amount: int=-1):
         return ProfessorCourse.nodes.all()
     if amount == 0:
         return None
-    return ProfessorCourse.nodes.all()[amount:]
+    return ProfessorCourse.nodes.all()[:amount]
 
 
 @query.field("hello")

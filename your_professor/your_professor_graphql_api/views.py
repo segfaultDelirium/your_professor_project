@@ -1,7 +1,7 @@
 import datetime
 
 from django.http import HttpResponse
-from .models import (Person, Country, Region, City,
+from .models import (Country, Region, City,
     University, Faculty, Specialization, ScienceDomain, Course, Professor, ProfessorCourse, User)
 from hashlib import pbkdf2_hmac
 from os import urandom
