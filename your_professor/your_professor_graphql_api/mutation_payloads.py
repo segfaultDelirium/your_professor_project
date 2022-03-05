@@ -1,4 +1,5 @@
-from .models import Country, Region, City, University
+from .models import Country, Region, City, University, Faculty, Specialization
+
 
 def create_mutation_payload(status: bool, error: str = None, data_type: str = None, data = None):
     if data_type:
@@ -27,3 +28,9 @@ def create_mutation_payload_city(status: bool, error: str = None, city: City = N
 
 def create_mutation_payload_university(status: bool, error: str = None, university: University = None):
     return create_mutation_payload(status, error, "university", university)
+
+def create_mutation_payload_faculty(status: bool, error: str = None, faculty: Faculty = None):
+    return create_mutation_payload(status, error, "faculty", faculty)
+
+def create_mutation_payload_specialization(status: bool, error: str = None, specialization: Specialization = None):
+    return create_mutation_payload(status, error, "specialization", specialization)

@@ -129,20 +129,31 @@ type_defs = gql("""
             name: String = "",
             is_active: Boolean = None,
             uid_region: String = None): MutationPayloadCity!
-        deleteCity(uid: String!, force: Boolean = False): MutationPayload
+        deleteCity(uid: String!, force: Boolean = False): MutationPayload!
         
         createUniversity(local_language_name: String!,
             name: String,
             is_active: Boolean = None,
             founding_year: Int = None,
-            uid_city: String!): MutationPayloadUniversity
+            uid_city: String!): MutationPayloadUniversity!
         updateUniversity(uid: String!,
             local_language_name: String = None,
             name: String = None,
             is_active: Boolean = None,
             founding_year: Int = None,
-            uid_city: String = None): MutationPayloadUniversity
-        deleteUniversity(uid: String!, force: Boolean = False): MutationPayload
+            uid_city: String = None): MutationPayloadUniversity!
+        deleteUniversity(uid: String!, force: Boolean = False): MutationPayload!
+        
+        createFaculty(name: String!, is_active: Boolean = None, uid_university: String!): MutationPayloadFaculty!
+        updateFaculty(uid: String!, name: String = None, is_active: Boolean = None,
+            uid_university: String = None): MutationPayloadFaculty!
+        deleteFaculty(uid: String!, force: Boolean = False): MutationPayload!
+        
+        createSpecialization(name: String!, is_active: Boolean = None, is_full_time: Boolean!, 
+            specialization_degree: Int!, uid_faculty: String!): MutationPayloadSpecialization!
+        updateSpecialization(uid: String!, name: String, is_active: Boolean = None, is_full_time: Boolean, 
+            specialization_degree: Int, uid_faculty: String): MutationPayloadSpecialization!
+        deleteSpecialization(uid: String!, force: Boolean = False): MutationPayload!
         
     }
     
@@ -173,6 +184,18 @@ type_defs = gql("""
         status: Boolean!
         error: String
         university: University
+    }
+    
+    type MutationPayloadFaculty{
+        status: Boolean!
+        error: String
+        faculty: Faculty
+    }
+    
+    type MutationPayloadSpecialization{
+        status: Boolean!
+        error: String
+        specialization: Specialization
     }
     
     

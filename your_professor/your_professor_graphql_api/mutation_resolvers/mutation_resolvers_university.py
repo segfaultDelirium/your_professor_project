@@ -1,8 +1,6 @@
 from ..models import City, University
 from ..mutation_payloads import create_mutation_payload, \
     create_mutation_payload_university
-from neomodel import db
-from neomodel import StructuredNode, RelationshipDefinition
 
 
 def resolve_create_university(_, info, local_language_name: str,
@@ -55,9 +53,9 @@ def resolve_update_university(_, info, uid, local_language_name=None, name=None,
                 university.save()
         return create_mutation_payload_university(True, university=university)
     except University.DoesNotExist:
-        return create_mutation_payload(False, error=f"City of uid {uid} could not be found.")
+        return create_mutation_payload(False, error=f"University of uid {uid} could not be found.")
     except City.DoesNotExist:
-        return create_mutation_payload(False, error=f"Region of uid {uid_city} could not be found.")
+        return create_mutation_payload(False, error=f"City of uid {uid_city} could not be found.")
 
 
 def resolve_delete_university(_, info, uid: str, force: bool = False):
