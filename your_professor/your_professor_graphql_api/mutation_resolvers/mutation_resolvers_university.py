@@ -2,6 +2,7 @@ from ..models import City, University
 from ..mutation_payloads import create_mutation_payload, \
     create_mutation_payload_university
 from neomodel import db
+from neomodel import StructuredNode, RelationshipDefinition
 
 
 def resolve_create_university(_, info, local_language_name: str,
@@ -61,13 +62,13 @@ def resolve_update_university(_, info, uid, local_language_name=None, name=None,
 
 def resolve_delete_university(_, info, uid: str, force: bool = False):
     try:
-        city = City.nodes.get(uid=uid)
-        if not force and len(city.universities.all()) != 0:
+        university = University.nodes.get(uid=uid)
+        if not force and len(university.faculties.all()) != 0:
             return create_mutation_payload(False,
-                                           "City you are trying to delete has Universities attached, "
+                                           "University you are trying to delete has Universities attached, "
                                            "please disconnect them before deleting it.")
-        city.delete()
+        university.delete()
         return create_mutation_payload(True)
-    except City.DoesNotExist:
-        return create_mutation_payload(False, "City you are trying to delete does not exist")
+    except University.DoesNotExist:
+        return create_mutation_payload(False, "University you are trying to delete does not exist")
 
