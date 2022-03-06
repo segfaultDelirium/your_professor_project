@@ -14,7 +14,7 @@ def resolve_region(obj, info, uid = None):
 
 def resolve_all_regions(obj, info, amount: int = None):
     if obj is not None:
-        if amount is None or amount >= len(Region.nodes):
+        if amount is None or amount >= len(obj.regions):
             return obj.region.all()
         return obj.region.all()[:amount]
 
