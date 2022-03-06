@@ -3,6 +3,21 @@ from ..mutation_payloads import create_mutation_payload_city, create_mutation_pa
 from neomodel import db
 
 
+def resolve_city(obj, info, uid=None):
+    if obj is not None:
+        return obj.cities.all()[0]
+    try:
+        return City.nodes.get(uid=uid)
+    except City.DoesNotExist:
+        return None
+
+
+def resolve_all_cities(_, info, amount: int = None):
+    if amount is None or amount >= len(City.nodes):
+        return City.nodes.all()
+    return City.nodes.all()[:amount]
+
+
 def resolve_create_city(_, info, local_language_name: str, name: str, uid_region: str):
     try:
         probing_city = City.nodes.get(local_language_name=local_language_name)

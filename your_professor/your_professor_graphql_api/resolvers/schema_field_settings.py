@@ -1,6 +1,7 @@
 from ariadne import (MutationType, QueryType, ObjectType)
 
-from .resolvers_city import resolve_create_city, resolve_update_city, resolve_delete_city
+from .resolvers_city import resolve_create_city, resolve_update_city, resolve_delete_city, resolve_all_cities, \
+    resolve_city
 from .resolvers_country import (resolve_create_country_by_ISO,
                                 resolve_update_country, resolve_delete_country, resolve_country, resolve_all_countries)
 from .resolvers_course import resolve_create_course, resolve_delete_course, resolve_update_course
@@ -21,6 +22,7 @@ query = QueryType()
 mutation = MutationType()
 country = ObjectType("Country")
 region = ObjectType("Region")
+city = ObjectType("City")
 
 professor = ObjectType("Professor")
 professor_course = ObjectType("ProfessorCourse")
@@ -33,12 +35,16 @@ mutation.set_field("updateCountry", resolve_update_country)
 mutation.set_field("deleteCountry", resolve_delete_country)
 
 query.set_field("region", resolve_region)
+city.set_field("region", resolve_region)
 query.set_field("allRegions", resolve_all_regions)
 country.set_field("regions", resolve_all_regions)
 mutation.set_field("createRegion", resolve_create_region)
 mutation.set_field("updateRegion", resolve_update_region)
 mutation.set_field("deleteRegion", resolve_delete_region)
 
+query.set_field("city", resolve_city)
+query.set_field("allCities", resolve_all_cities)
+region.set_field("cities", resolve_all_cities)
 mutation.set_field("createCity", resolve_create_city)
 mutation.set_field("updateCity", resolve_update_city)
 mutation.set_field("deleteCity", resolve_delete_city)

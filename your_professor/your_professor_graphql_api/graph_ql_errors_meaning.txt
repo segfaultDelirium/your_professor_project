@@ -4,3 +4,5 @@ graphql errors explanation:
     you probably forgot a comma `,` or have comma after last variable
     in query variables list
 	
+"Cannot return null for non-nullable field Region.uid.":
+    schema ObjectType is probably not imported to the schema.py or is not in argument of make_executable_schema()
