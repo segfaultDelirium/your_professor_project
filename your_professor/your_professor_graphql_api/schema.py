@@ -1,16 +1,24 @@
-from ariadne import (QueryType, ObjectType,
+from ariadne import (QueryType, ObjectType, ScalarType,
                      gql, make_executable_schema)
 from ariadne.asgi import GraphQL
-from .resolvers import query, professor_course, professor, region
-from .mutation_resolvers.mutation_resolvers import mutation
+from .resolvers.schema_field_settings import (mutation, query, country, professor_course, professor,
+                                              region)
+
+datetime_scalar = ScalarType("Datetime")
+
+
+@datetime_scalar.serializer
+def serialize_datetime(value):
+    return value.isoformat()
 
 type_defs = gql("""
     type Query{
-        hello: String!
         country(local_language_name: String): Country
         allCountries(amount: Int): [Country!]!
         allRegions(amount: Int): [Region!]
         region(uid: String): Region
+        # cities(
+        
         allProfessors(amount: Int): [Professor!]!
         allProfessorCourses(amount: Int): [ProfessorCourse!]!
     }
@@ -37,6 +45,7 @@ type_defs = gql("""
         name: String!
         is_active: Boolean!
         universities: [University!]!
+        region: Region!
     }
     
     type University{
@@ -102,37 +111,39 @@ type_defs = gql("""
         is_professor_lecturer: Boolean!
     }
     
-    type Date{
-        year: Int!
-        month: Int!
-        day: Int!
-    }
+    scalar Datetime
     
-    type Time{
-        hour: Int!
-        minute: Int!
-        second: Int!
-    }
-    
-    type DateTime{
-        date: Date!
-        time: Time!
-    }
-    
-    # type User{
-    #     uid: String!
-    #     is_active: Boolean!
-    #     username: String!
-    #     email_address: String
-    #     is_staff: Boolean!
-    #     is_super_user: Boolean!
-    #     first_name: String
-    #     last_name: String
-    #     date_joined: DateTime
-    #     birthday: Date
-    #     courses: [Course!]
-    #     specializations: [Specialization!]
+    # type Date{
+    #     year: Int!
+    #     month: Int!
+    #     day: Int!
     # }
+    # 
+    # type Time{
+    #     hour: Int!
+    #     minute: Int!
+    #     second: Int!
+    # }
+    # 
+    # type DateTime{
+    #     date: Date!
+    #     time: Time!
+    # }
+    
+    type User{
+        uid: String!
+        is_active: Boolean!
+        username: String!
+        email_address: String
+        is_staff: Boolean!
+        is_super_user: Boolean!
+        first_name: String
+        last_name: String
+        date_joined: Datetime
+        # birthday: Date
+        courses: [Course!]
+        specializations: [Specialization!]
+    }
     
     type Mutation{
         createCountryByISO(local_language_name: String!,
@@ -292,9 +303,11 @@ type_defs = gql("""
 schema = make_executable_schema(type_defs,
                                 query,
                                 mutation,
+                                country,
+                                region,
                                 professor_course,
                                 professor,
-                                region)
+                                datetime_scalar)
 
 app = GraphQL(schema, debug=True)
 

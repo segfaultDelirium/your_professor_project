@@ -3,6 +3,22 @@ from ..mutation_payloads import create_mutation_payload, \
     create_mutation_payload_professor
 
 
+def resolve_professor_course_professor(obj, info, uid):
+    if obj is not None:
+        return obj.country.all()[0]
+    try:
+        return Professor.nodes.get(uid=uid)
+    except Professor.DoesNotExist:
+        return None
+
+
+def resolve_all_professors(_, info, amount: int = None):
+    print("in resolve_all_professors, amount = ", amount)
+    if amount is None or amount >= len(Professor.nodes):
+        return Professor.nodes.all()
+    return Professor.nodes.all()[:amount]
+
+
 def resolve_create_professor(_, info, first_name: str, last_name: str, is_active: bool = None, birth_year: int = None,
                              is_male: bool = None, degree: str = None, uid_professor_course: str = None):
     try:

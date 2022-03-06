@@ -3,6 +3,12 @@ from ..mutation_payloads import create_mutation_payload, \
     create_mutation_payload_professor_course
 
 
+def resolve_all_professor_courses(_, info, amount: int = None):
+    if amount is None or amount >= len(ProfessorCourse.nodes):
+        return ProfessorCourse.nodes.all()
+    return ProfessorCourse.nodes.all()[:amount]
+
+
 def resolve_create_professor_course(_, info, is_active: bool = None, uid_course: str = None, uid_professor: str = None,
                                     is_professor_lecturer: bool = None):
     try:

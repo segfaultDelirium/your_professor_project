@@ -1,5 +1,20 @@
-from ..models import Country, COUNTRIES
+from ..models import Country, COUNTRIES, Region
 from ..mutation_payloads import create_mutation_payload_country, create_mutation_payload
+
+
+def resolve_country(obj, info, local_language_name=None):
+    if obj is not None:
+        return obj.country.all()[0]
+    try:
+        return Country.nodes.get(local_language_name=local_language_name)
+    except Country.DoesNotExist:
+        return None
+
+
+def resolve_all_countries(_, info, amount: int = None):
+    if amount is None or amount >= len(Country.nodes):
+        return Country.nodes.all()
+    return Country.nodes.all()[:amount]
 
 
 def resolve_create_country_by_ISO(_, info, local_language_name: str, ISO_code_name: str):
