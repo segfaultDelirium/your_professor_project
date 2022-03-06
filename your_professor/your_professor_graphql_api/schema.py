@@ -26,6 +26,8 @@ type_defs = gql("""
         allFaculties(amount: Int): [Faculty!]
         specialization(uid: String!): Specialization
         allSpecializations(amount: Int): [Specialization!]
+        scienceDomain(uid: String!): ScienceDomain
+        allScienceDomains(amount: Int): [ScienceDomain!]
         
         allProfessors(amount: Int): [Professor!]!
         allProfessorCourses(amount: Int): [ProfessorCourse!]!
@@ -90,6 +92,7 @@ type_defs = gql("""
         name: String!
         name_in_polish: String
         is_active: Boolean!
+        specializations: [Specialization!]
     }
     
     type Course{
@@ -210,6 +213,14 @@ type_defs = gql("""
             specialization_degree: Int, uid_faculty: String): MutationPayloadSpecialization!
         deleteSpecialization(uid: String!, force: Boolean = False): MutationPayload!
         
+        createScienceDomain(name: String!, name_in_polish: String, is_active: Boolean): MutationPayloadScienceDomain!
+        updateScienceDomain(uid: String!, name: String, name_in_polish: String, 
+            is_active: Boolean): MutationPayloadScienceDomain!
+        connectScienceDomainToSpecialization(uid: String!, uid_specialization: String!): MutationPayloadScienceDomain!
+        disconnectScienceDomainFromSpecialization(uid: String!, 
+            uid_specialization: String!): MutationPayloadScienceDomain!
+        deleteScienceDomain(uid: String!, force: Boolean = False): MutationPayload!
+        
         createCourse(name: String!, is_active: Boolean = None, lecture_hours_amount: Int!, 
             exercises_hours_amount: Int!, has_exam: Boolean!, ECTS: Int!, is_obligatory: Boolean!, semester: Int!,
              uid_specialization: String!): MutationPayloadCourse! 
@@ -284,6 +295,11 @@ type_defs = gql("""
         specialization: Specialization
     }
     
+    type MutationPayloadScienceDomain{
+        status: Boolean!
+        error: String
+        science_domain: ScienceDomain
+    }
     type MutationPayloadCourse{
         status: Boolean!
         error: String

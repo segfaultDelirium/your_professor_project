@@ -14,6 +14,9 @@ from .resolvers_professor_course import resolve_create_professor_course, resolve
     resolve_delete_professor_course, resolve_all_professor_courses
 from .resolvers_region import (resolve_update_region, resolve_create_region, resolve_delete_region, resolve_region,
                                resolve_all_regions)
+from .resolvers_science_domain import resolve_science_domain, resolve_all_science_domains, \
+    resolve_create_science_domain, resolve_update_science_domain, resolve_delete_science_domain, \
+    resolve_connect_science_domain_to_specialization, resolve_disconnect_science_domain_from_specialization
 from .resolvers_specialization import resolve_create_specialization, resolve_delete_specialization, \
     resolve_update_specialization, resolve_specialization, resolve_all_specialization
 from .resolvers_university import resolve_create_university, resolve_update_university, \
@@ -75,6 +78,14 @@ faculty.set_field("specializations", resolve_all_specialization)
 mutation.set_field("createSpecialization", resolve_create_specialization)
 mutation.set_field("updateSpecialization", resolve_update_specialization)
 mutation.set_field("deleteSpecialization", resolve_delete_specialization)
+
+query.set_field("scienceDomain", resolve_science_domain)
+query.set_field("allScienceDomains", resolve_all_science_domains)
+mutation.set_field("createScienceDomain", resolve_create_science_domain)
+mutation.set_field("updateScienceDomain", resolve_update_science_domain)
+mutation.set_field("connectScienceDomainToSpecialization", resolve_connect_science_domain_to_specialization)
+mutation.set_field("disconnectScienceDomainFromSpecialization", resolve_disconnect_science_domain_from_specialization)
+mutation.set_field("deleteScienceDomain", resolve_delete_science_domain)
 
 mutation.set_field("createCourse", resolve_create_course)
 mutation.set_field("updateCourse", resolve_update_course)

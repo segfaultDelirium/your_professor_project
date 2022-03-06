@@ -1,15 +1,13 @@
 from ..models import Faculty, Specialization
 from ..mutation_payloads import create_mutation_payload, \
     create_mutation_payload_specialization
+from .resolver_utils import get_amount_or_all_of, get_nodes_by_uid_or_none_of
 
 
 def resolve_specialization(obj, info, uid=None):
     if obj is not None:
         return obj.specialization.all()[0]
-    try:
-        return Specialization.nodes.get(uid=uid)
-    except Specialization.DoesNotExist:
-        return None
+    return get_nodes_by_uid_or_none_of(Specialization, uid)
 
 
 def resolve_all_specialization(obj, info, amount: int = None):
@@ -17,9 +15,7 @@ def resolve_all_specialization(obj, info, amount: int = None):
         if amount is None or amount >= len(obj.specializations):
             return obj.specializations.all()
         return obj.specializations.all()[:amount]
-    if amount is None or amount >= len(Specialization.nodes):
-        return Specialization.nodes.all()
-    return Specialization.nodes.all()[:amount]
+    return get_amount_or_all_of(Specialization, amount)
 
 
 def resolve_create_specialization(_, info, name: str, is_active: bool = None, is_full_time: bool = None,

@@ -84,6 +84,7 @@ class ScienceDomain(StructuredNode):  # example biology, computer science
     name = StringProperty(max_length=100, required=True)
     name_in_polish = StringProperty()
     is_active = BooleanProperty(default=True)
+    specializations = RelationshipFrom(Specialization, "IS_PART_OF_DOMAIN", cardinality=ZeroOrMore)
 
 
 class Course(StructuredNode):  # example "Python in the enterprise" or "Bazy danych 1"

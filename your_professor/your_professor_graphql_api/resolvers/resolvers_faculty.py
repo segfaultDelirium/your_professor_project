@@ -1,14 +1,13 @@
 from ..models import University, Faculty
 from ..mutation_payloads import create_mutation_payload, \
     create_mutation_payload_faculty
+from .resolver_utils import get_amount_or_all_of, get_nodes_by_uid_or_none_of
+
 
 def resolve_faculty(obj, info, uid=None):
     if obj is not None:
         return obj.faculty.all()[0]
-    try:
-        return Faculty.nodes.get(uid=uid)
-    except Faculty.DoesNotExist:
-        return None
+    return get_amount_or_all_of(Faculty, uid)
 
 
 def resolve_all_faculties(obj, info, amount: int = None):
@@ -16,9 +15,7 @@ def resolve_all_faculties(obj, info, amount: int = None):
         if amount is None or amount >= len(obj.faculties):
             return obj.faculties.all()
         return obj.faculties.all()[:amount]
-    if amount is None or amount >= len(Faculty.nodes):
-        return Faculty.nodes.all()
-    return Faculty.nodes.all()[:amount]
+    return get_nodes_by_uid_or_none_of(Faculty, amount)
 
 
 def resolve_create_faculty(_, info, name: str = None, is_active: bool = None, uid_university: str = None):

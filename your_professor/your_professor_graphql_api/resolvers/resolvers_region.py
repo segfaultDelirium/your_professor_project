@@ -1,15 +1,12 @@
 from ..models import Region, Country
 from ..mutation_payloads import create_mutation_payload_region, create_mutation_payload
 from neomodel.exceptions import AttemptedCardinalityViolation
-
+from .resolver_utils import get_amount_or_all_of, get_nodes_by_uid_or_none_of
 
 def resolve_region(obj, info, uid = None):
     if obj is not None:
         return obj.region.all()[0]
-    try:
-        return Region.nodes.get(uid=uid)
-    except Region.DoesNotExist:
-        return None
+    return get_nodes_by_uid_or_none_of(Region, uid)
 
 
 def resolve_all_regions(obj, info, amount: int = None):
@@ -17,10 +14,7 @@ def resolve_all_regions(obj, info, amount: int = None):
         if amount is None or amount >= len(obj.regions):
             return obj.region.all()
         return obj.region.all()[:amount]
-
-    if amount is None or amount >= len(Region.nodes):
-        return Region.nodes.all()
-    return Region.nodes.all()[:amount]
+    return get_amount_or_all_of(Region, amount)
 
 
 def resolve_create_region(_, info, local_language_name: str, name: str, uid_country: str):
