@@ -3,6 +3,25 @@ from ..mutation_payloads import create_mutation_payload, \
     create_mutation_payload_specialization
 
 
+def resolve_specialization(obj, info, uid=None):
+    if obj is not None:
+        return obj.specialization.all()[0]
+    try:
+        return Specialization.nodes.get(uid=uid)
+    except Specialization.DoesNotExist:
+        return None
+
+
+def resolve_all_specialization(obj, info, amount: int = None):
+    if obj is not None:
+        if amount is None or amount >= len(obj.specializations):
+            return obj.specializations.all()
+        return obj.specializations.all()[:amount]
+    if amount is None or amount >= len(Specialization.nodes):
+        return Specialization.nodes.all()
+    return Specialization.nodes.all()[:amount]
+
+
 def resolve_create_specialization(_, info, name: str, is_active: bool = None, is_full_time: bool = None,
                                   specialization_degree: int = None, uid_faculty: str = None):
     try:

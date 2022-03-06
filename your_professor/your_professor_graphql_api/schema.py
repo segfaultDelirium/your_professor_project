@@ -2,7 +2,7 @@ from ariadne import (QueryType, ObjectType, ScalarType,
                      gql, make_executable_schema)
 from ariadne.asgi import GraphQL
 from .resolvers.schema_field_settings import (mutation, query, country, region, city, university, faculty,
-                                              professor_course, professor)
+                                              specialization, professor_course, professor)
 
 datetime_scalar = ScalarType("Datetime")
 
@@ -24,6 +24,8 @@ type_defs = gql("""
         allUniversities(amount: Int): [University!]
         faculty(uid: String!): Faculty
         allFaculties(amount: Int): [Faculty!]
+        specialization(uid: String!): Specialization
+        allSpecializations(amount: Int): [Specialization!]
         
         allProfessors(amount: Int): [Professor!]!
         allProfessorCourses(amount: Int): [ProfessorCourse!]!
@@ -72,6 +74,17 @@ type_defs = gql("""
         university: University!
     }
     
+    type Specialization{
+        uid: String!
+        name: String!
+        is_active: Boolean!
+        is_full_time: Boolean!
+        specialization_degree: Int!
+        science_domains: [ScienceDomain!]!
+        courses: [Course!]!
+        faculty: Faculty!
+    }
+    
     type ScienceDomain{
         uid: String!
         name: String!
@@ -89,16 +102,6 @@ type_defs = gql("""
         ECTS: Int!
         is_obligatory: Boolean!
         semester: Int!
-    }
-    
-    type Specialization{
-        uid: String!
-        name: String!
-        is_active: Boolean!
-        is_full_time: Boolean!
-        specialization_degree: Int!
-        science_domains: [ScienceDomain!]!
-        courses: [Course!]!
     }
     
     type Professor{
@@ -316,6 +319,7 @@ schema = make_executable_schema(type_defs,
                                 city,
                                 university,
                                 faculty,
+specialization,
                                 professor_course,
                                 professor,
                                 datetime_scalar)

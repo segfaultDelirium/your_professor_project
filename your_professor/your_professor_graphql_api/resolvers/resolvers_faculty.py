@@ -4,7 +4,7 @@ from ..mutation_payloads import create_mutation_payload, \
 
 def resolve_faculty(obj, info, uid=None):
     if obj is not None:
-        return obj.faculties.all()[0]
+        return obj.faculty.all()[0]
     try:
         return Faculty.nodes.get(uid=uid)
     except Faculty.DoesNotExist:

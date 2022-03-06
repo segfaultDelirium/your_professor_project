@@ -15,7 +15,7 @@ from .resolvers_professor_course import resolve_create_professor_course, resolve
 from .resolvers_region import (resolve_update_region, resolve_create_region, resolve_delete_region, resolve_region,
                                resolve_all_regions)
 from .resolvers_specialization import resolve_create_specialization, resolve_delete_specialization, \
-    resolve_update_specialization
+    resolve_update_specialization, resolve_specialization, resolve_all_specialization
 from .resolvers_university import resolve_create_university, resolve_update_university, \
     resolve_delete_university, resolve_university, resolve_all_universities
 
@@ -26,6 +26,7 @@ region = ObjectType("Region")
 city = ObjectType("City")
 university = ObjectType("University")
 faculty = ObjectType("Faculty")
+specialization = ObjectType("Specialization")
 
 professor = ObjectType("Professor")
 professor_course = ObjectType("ProfessorCourse")
@@ -61,12 +62,16 @@ mutation.set_field("updateUniversity", resolve_update_university)
 mutation.set_field("deleteUniversity", resolve_delete_university)
 
 query.set_field("faculty", resolve_faculty)
+specialization.set_field("faculty", resolve_faculty)
 query.set_field("allFaculties", resolve_all_faculties)
 university.set_field("faculties", resolve_all_faculties)
 mutation.set_field("createFaculty", resolve_create_faculty)
 mutation.set_field("updateFaculty", resolve_update_faculty)
 mutation.set_field("deleteFaculty", resolve_delete_faculty)
 
+query.set_field("specialization", resolve_specialization)
+query.set_field("allSpecializations", resolve_all_specialization)
+faculty.set_field("specializations", resolve_all_specialization)
 mutation.set_field("createSpecialization", resolve_create_specialization)
 mutation.set_field("updateSpecialization", resolve_update_specialization)
 mutation.set_field("deleteSpecialization", resolve_delete_specialization)

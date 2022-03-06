@@ -67,13 +67,6 @@ class Faculty(StructuredNode):  # example "wydzial fizyki i informatyki stosowan
     specializations = RelationshipTo("Specialization", "HAS_SPECIALIZATION", cardinality=ZeroOrMore)
 
 
-class ScienceDomain(StructuredNode):  # example biology, computer science
-    uid = UniqueIdProperty()
-    name = StringProperty(max_length=100, required=True)
-    name_in_polish = StringProperty()
-    is_active = BooleanProperty(default=True)
-
-
 class Specialization(StructuredNode):  # example "informatyka stosowana", "fizyka medyczna"
     uid = UniqueIdProperty()
     name = StringProperty(max_length=100)
@@ -81,9 +74,16 @@ class Specialization(StructuredNode):  # example "informatyka stosowana", "fizyk
     is_full_time = BooleanProperty(required=True)
     specialization_degree = IntegerProperty()  # 0 bachelor, 1 master, 2 doctor
     faculty = RelationshipFrom(Faculty, "HAS_SPECIALIZATION", cardinality=One)
-    science_domains = RelationshipTo(ScienceDomain, "IS_PART_OF_DOMAIN", cardinality=ZeroOrMore)
+    science_domains = RelationshipTo("ScienceDomain", "IS_PART_OF_DOMAIN", cardinality=ZeroOrMore)
     courses = RelationshipTo("Course", "HAS_COURSE", cardinality=ZeroOrMore)
     review = RelationshipFrom('Review', "reviews", cardinality=ZeroOrMore)
+
+
+class ScienceDomain(StructuredNode):  # example biology, computer science
+    uid = UniqueIdProperty()
+    name = StringProperty(max_length=100, required=True)
+    name_in_polish = StringProperty()
+    is_active = BooleanProperty(default=True)
 
 
 class Course(StructuredNode):  # example "Python in the enterprise" or "Bazy danych 1"
