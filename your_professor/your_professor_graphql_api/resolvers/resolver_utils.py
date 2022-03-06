@@ -3,7 +3,6 @@ from neomodel import StructuredNode
 
 def get_nodes_by_uid_or_none_of(node_class: StructuredNode, uid: str):
     try:
-        print(node_class.nodes.get(uid=uid))
         return node_class.nodes.get(uid=uid)
     except node_class.DoesNotExist:
         return None

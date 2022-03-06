@@ -1,6 +1,21 @@
 from ..models import Specialization, Course
 from ..mutation_payloads import create_mutation_payload, \
     create_mutation_payload_course
+from .resolver_utils import get_amount_or_all_of, get_nodes_by_uid_or_none_of
+
+
+def resolve_course(obj, info, uid=None):
+    if obj is not None:
+        return obj.course.all()[0]
+    return get_nodes_by_uid_or_none_of(Course, uid)
+
+
+def resolve_all_courses(obj, info, amount: int = None):
+    if obj is not None:
+        if amount is None or amount >= len(obj.courses):
+            return obj.courses.all()
+        return obj.courses.all()[:amount]
+    return get_amount_or_all_of(Course, amount)
 
 
 def resolve_create_course(_, info, name: str, is_active: bool = None, lecture_hours_amount: int = None,

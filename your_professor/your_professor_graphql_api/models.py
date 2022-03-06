@@ -98,7 +98,7 @@ class Course(StructuredNode):  # example "Python in the enterprise" or "Bazy dan
     is_obligatory = BooleanProperty()
     semester = IntegerProperty()
     review = RelationshipFrom('Review', "reviews", cardinality=ZeroOrMore)
-    specialization = RelationshipFrom(Specialization, "HAS_COURSE", cardinality=OneOrMore)
+    specializations = RelationshipFrom(Specialization, "HAS_COURSE", cardinality=OneOrMore)
     professor_course = RelationshipTo("ProfessorCourse", "IS_TAUGHT_BY")
 
 

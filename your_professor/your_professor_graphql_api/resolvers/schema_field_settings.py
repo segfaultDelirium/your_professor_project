@@ -4,7 +4,8 @@ from .resolvers_city import resolve_create_city, resolve_update_city, resolve_de
     resolve_city
 from .resolvers_country import (resolve_create_country_by_ISO,
                                 resolve_update_country, resolve_delete_country, resolve_country, resolve_all_countries)
-from .resolvers_course import resolve_create_course, resolve_delete_course, resolve_update_course
+from .resolvers_course import resolve_create_course, resolve_delete_course, resolve_update_course, resolve_course, \
+    resolve_all_courses
 from .resolvers_faculty import resolve_create_faculty, resolve_update_faculty, resolve_delete_faculty, resolve_faculty, \
     resolve_all_faculties
 from .resolvers_professor import resolve_create_professor, resolve_delete_professor, resolve_update_professor, \
@@ -30,6 +31,8 @@ city = ObjectType("City")
 university = ObjectType("University")
 faculty = ObjectType("Faculty")
 specialization = ObjectType("Specialization")
+science_domain = ObjectType("ScienceDomain")
+course = ObjectType("Course")
 
 professor = ObjectType("Professor")
 professor_course = ObjectType("ProfessorCourse")
@@ -75,6 +78,8 @@ mutation.set_field("deleteFaculty", resolve_delete_faculty)
 query.set_field("specialization", resolve_specialization)
 query.set_field("allSpecializations", resolve_all_specialization)
 faculty.set_field("specializations", resolve_all_specialization)
+course.set_field("specializations", resolve_all_specialization)
+science_domain.set_field("specializations", resolve_all_specialization)
 mutation.set_field("createSpecialization", resolve_create_specialization)
 mutation.set_field("updateSpecialization", resolve_update_specialization)
 mutation.set_field("deleteSpecialization", resolve_delete_specialization)
@@ -87,6 +92,8 @@ mutation.set_field("connectScienceDomainToSpecialization", resolve_connect_scien
 mutation.set_field("disconnectScienceDomainFromSpecialization", resolve_disconnect_science_domain_from_specialization)
 mutation.set_field("deleteScienceDomain", resolve_delete_science_domain)
 
+query.set_field("course", resolve_course)
+query.set_field("allCourses", resolve_all_courses)
 mutation.set_field("createCourse", resolve_create_course)
 mutation.set_field("updateCourse", resolve_update_course)
 mutation.set_field("deleteCourse", resolve_delete_course)

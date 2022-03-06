@@ -13,6 +13,7 @@ def resolve_specialization(obj, info, uid=None):
 def resolve_all_specialization(obj, info, amount: int = None):
     if obj is not None:
         if amount is None or amount >= len(obj.specializations):
+            print(obj)
             return obj.specializations.all()
         return obj.specializations.all()[:amount]
     return get_amount_or_all_of(Specialization, amount)
