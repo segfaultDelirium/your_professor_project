@@ -16,13 +16,14 @@ from .resolvers_region import (resolve_update_region, resolve_create_region, res
 from .resolvers_specialization import resolve_create_specialization, resolve_delete_specialization, \
     resolve_update_specialization
 from .resolvers_university import resolve_create_university, resolve_update_university, \
-    resolve_delete_university
+    resolve_delete_university, resolve_university, resolve_all_universities
 
 query = QueryType()
 mutation = MutationType()
 country = ObjectType("Country")
 region = ObjectType("Region")
 city = ObjectType("City")
+university = ObjectType("University")
 
 professor = ObjectType("Professor")
 professor_course = ObjectType("ProfessorCourse")
@@ -37,18 +38,21 @@ mutation.set_field("deleteCountry", resolve_delete_country)
 query.set_field("region", resolve_region)
 city.set_field("region", resolve_region)
 query.set_field("allRegions", resolve_all_regions)
-country.set_field("regions", resolve_all_regions)
 mutation.set_field("createRegion", resolve_create_region)
 mutation.set_field("updateRegion", resolve_update_region)
 mutation.set_field("deleteRegion", resolve_delete_region)
 
 query.set_field("city", resolve_city)
+university.set_field("city", resolve_city)
 query.set_field("allCities", resolve_all_cities)
 region.set_field("cities", resolve_all_cities)
 mutation.set_field("createCity", resolve_create_city)
 mutation.set_field("updateCity", resolve_update_city)
 mutation.set_field("deleteCity", resolve_delete_city)
 
+query.set_field("university", resolve_university)
+query.set_field("allUniversities", resolve_all_universities)
+city.set_field("universities", resolve_all_universities)
 mutation.set_field("createUniversity", resolve_create_university)
 mutation.set_field("updateUniversity", resolve_update_university)
 mutation.set_field("deleteUniversity", resolve_delete_university)

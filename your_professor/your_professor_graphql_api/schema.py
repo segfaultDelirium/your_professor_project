@@ -14,10 +14,12 @@ type_defs = gql("""
     type Query{
         country(local_language_name: String): Country
         allCountries(amount: Int): [Country!]!
-        allRegions(amount: Int): [Region!]
         region(uid: String): Region
+        allRegions(amount: Int): [Region!]
         city(uid: String!): City
         allCities(amount: Int): [City!]
+        university(uid: String!): University
+        allUniversities(amount: Int): [University!]
         
         allProfessors(amount: Int): [Professor!]!
         allProfessorCourses(amount: Int): [ProfessorCourse!]!
@@ -27,7 +29,7 @@ type_defs = gql("""
         local_language_name: String!
         ISO_code_name: String!
         is_active: Boolean!
-        regions(amount: Int): [Region!]!
+        regions(amount: Int): [Region!]
     }
     
     type Region{
@@ -55,6 +57,7 @@ type_defs = gql("""
         is_active: Boolean!
         founding_year: Int
         faculties: [Faculty!]!
+        city: City!
     }
     
     type Faculty{

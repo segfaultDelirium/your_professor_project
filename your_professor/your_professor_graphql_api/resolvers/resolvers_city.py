@@ -12,7 +12,11 @@ def resolve_city(obj, info, uid=None):
         return None
 
 
-def resolve_all_cities(_, info, amount: int = None):
+def resolve_all_cities(obj, info, amount: int = None):
+    if obj is not None:
+        if amount is None or amount >= len(City.nodes):
+            return obj.cities.all()
+        return obj.cities.all()[:amount]
     if amount is None or amount >= len(City.nodes):
         return City.nodes.all()
     return City.nodes.all()[:amount]
