@@ -1,7 +1,8 @@
 from ariadne import (QueryType, ObjectType, ScalarType,
                      gql, make_executable_schema)
 from ariadne.asgi import GraphQL
-from .resolvers.schema_field_settings import (mutation, query, country, region, city, professor_course, professor)
+from .resolvers.schema_field_settings import (mutation, query, country, region, city, university, professor_course,
+                                              professor)
 
 datetime_scalar = ScalarType("Datetime")
 
@@ -9,6 +10,7 @@ datetime_scalar = ScalarType("Datetime")
 @datetime_scalar.serializer
 def serialize_datetime(value):
     return value.isoformat()
+
 
 type_defs = gql("""
     type Query{
@@ -56,7 +58,7 @@ type_defs = gql("""
         name: String!
         is_active: Boolean!
         founding_year: Int
-        faculties: [Faculty!]!
+        faculties: [Faculty!]
         city: City!
     }
     
@@ -309,9 +311,9 @@ schema = make_executable_schema(type_defs,
                                 country,
                                 region,
                                 city,
+                                university,
                                 professor_course,
                                 professor,
                                 datetime_scalar)
 
 app = GraphQL(schema, debug=True)
-

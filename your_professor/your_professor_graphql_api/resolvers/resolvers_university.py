@@ -5,17 +5,22 @@ from ..mutation_payloads import create_mutation_payload, \
 
 def resolve_university(obj, info, uid=None):
     if obj is not None:
-        return obj.cities.all()[0]
+        return obj.universities.all()[0]
     try:
         return University.nodes.get(uid=uid)
     except University.DoesNotExist:
         return None
 
 
-def resolve_all_universities(_, info, amount: int = None):
+def resolve_all_universities(obj, info, amount: int = None):
+    if obj is not None:
+        if amount is None or amount >= len(obj.universities):
+            return obj.universities.all()
+        return obj.universities.all()[:amount]
     if amount is None or amount >= len(University.nodes):
         return University.nodes.all()
     return University.nodes.all()[:amount]
+
 
 def resolve_create_university(_, info, local_language_name: str,
                               name: str = None, is_active: bool = None, founding_year: int = None, uid_city: str = None):

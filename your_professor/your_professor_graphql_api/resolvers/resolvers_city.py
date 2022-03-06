@@ -5,7 +5,7 @@ from neomodel import db
 
 def resolve_city(obj, info, uid=None):
     if obj is not None:
-        return obj.cities.all()[0]
+        return obj.city.all()[0]
     try:
         return City.nodes.get(uid=uid)
     except City.DoesNotExist:
