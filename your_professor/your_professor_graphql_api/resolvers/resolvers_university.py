@@ -5,7 +5,7 @@ from ..mutation_payloads import create_mutation_payload, \
 
 def resolve_university(obj, info, uid=None):
     if obj is not None:
-        return obj.universities.all()[0]
+        return obj.university.all()[0]
     try:
         return University.nodes.get(uid=uid)
     except University.DoesNotExist:

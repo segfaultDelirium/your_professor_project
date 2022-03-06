@@ -5,7 +5,8 @@ from .resolvers_city import resolve_create_city, resolve_update_city, resolve_de
 from .resolvers_country import (resolve_create_country_by_ISO,
                                 resolve_update_country, resolve_delete_country, resolve_country, resolve_all_countries)
 from .resolvers_course import resolve_create_course, resolve_delete_course, resolve_update_course
-from .resolvers_faculty import resolve_create_faculty, resolve_update_faculty, resolve_delete_faculty
+from .resolvers_faculty import resolve_create_faculty, resolve_update_faculty, resolve_delete_faculty, resolve_faculty, \
+    resolve_all_faculties
 from .resolvers_professor import resolve_create_professor, resolve_delete_professor, resolve_update_professor, \
     resolve_connect_professor_to_professor_course, resolve_reconnect_professor_to_professor_course, \
     resolve_disconnect_professor_from_professor_course, resolve_all_professors, resolve_professor_course_professor
@@ -24,6 +25,7 @@ country = ObjectType("Country")
 region = ObjectType("Region")
 city = ObjectType("City")
 university = ObjectType("University")
+faculty = ObjectType("Faculty")
 
 professor = ObjectType("Professor")
 professor_course = ObjectType("ProfessorCourse")
@@ -51,12 +53,16 @@ mutation.set_field("updateCity", resolve_update_city)
 mutation.set_field("deleteCity", resolve_delete_city)
 
 query.set_field("university", resolve_university)
+faculty.set_field("university", resolve_university)
 query.set_field("allUniversities", resolve_all_universities)
 city.set_field("universities", resolve_all_universities)
 mutation.set_field("createUniversity", resolve_create_university)
 mutation.set_field("updateUniversity", resolve_update_university)
 mutation.set_field("deleteUniversity", resolve_delete_university)
 
+query.set_field("faculty", resolve_faculty)
+query.set_field("allFaculties", resolve_all_faculties)
+university.set_field("faculties", resolve_all_faculties)
 mutation.set_field("createFaculty", resolve_create_faculty)
 mutation.set_field("updateFaculty", resolve_update_faculty)
 mutation.set_field("deleteFaculty", resolve_delete_faculty)

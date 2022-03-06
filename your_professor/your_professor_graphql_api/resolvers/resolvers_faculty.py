@@ -2,6 +2,24 @@ from ..models import University, Faculty
 from ..mutation_payloads import create_mutation_payload, \
     create_mutation_payload_faculty
 
+def resolve_faculty(obj, info, uid=None):
+    if obj is not None:
+        return obj.faculties.all()[0]
+    try:
+        return Faculty.nodes.get(uid=uid)
+    except Faculty.DoesNotExist:
+        return None
+
+
+def resolve_all_faculties(obj, info, amount: int = None):
+    if obj is not None:
+        if amount is None or amount >= len(obj.faculties):
+            return obj.faculties.all()
+        return obj.faculties.all()[:amount]
+    if amount is None or amount >= len(Faculty.nodes):
+        return Faculty.nodes.all()
+    return Faculty.nodes.all()[:amount]
+
 
 def resolve_create_faculty(_, info, name: str = None, is_active: bool = None, uid_university: str = None):
     try:
