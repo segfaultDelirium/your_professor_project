@@ -87,7 +87,10 @@ DATABASES = {
    }
 }
 
-config.DATABASE_URL = 'bolt://neo4j:3BejhhmCyUa4oPLm2XAgmX8GcsGqipFf9EtQvmPuo@localhost:7687/neo4j'  # default
+neo4j_login = "neo4j"
+neo4j_password = "3BejhhmCyUa4oPLm2XAgmX8GcsGqipFf9EtQvmPuo"
+config.DATABASE_URL = f'bolt://{neo4j_login}:{neo4j_password}@localhost:7687/neo4j'  # default
+
 # You can specify a database name: 'bolt://neo4j:neo4j@localhost:7687/mydb'
 
 # Password validation

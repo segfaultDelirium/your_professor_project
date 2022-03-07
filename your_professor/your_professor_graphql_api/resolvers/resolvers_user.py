@@ -1,15 +1,17 @@
 from ..models import User, Professor
 from ..mutation_payloads import create_mutation_payload, \
     create_mutation_payload_professor
-from .resolver_utils import get_amount_or_all_of, get_nodes_by_uid_or_none_of
+from .resolver_utils import get_amount_or_all_of, get_nodes_by_uid_or_none_of, check_database_connection
 
 
+@check_database_connection
 def resolve_user(obj, info, uid=None):
     if obj is not None:
         return obj.user.all()[0]
     return get_nodes_by_uid_or_none_of(User, uid)
 
 
+@check_database_connection
 def resolve_all_users(obj, info, amount: int = None):
     if obj is not None:
         if amount is None or amount >= len(obj.users):
