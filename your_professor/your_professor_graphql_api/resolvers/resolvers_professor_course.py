@@ -1,12 +1,22 @@
 from ..models import Course, ProfessorCourse, Professor
 from ..mutation_payloads import create_mutation_payload, \
     create_mutation_payload_professor_course
+from .resolver_utils import get_amount_or_all_of, get_nodes_by_uid_or_none_of
 
 
-def resolve_all_professor_courses(_, info, amount: int = None):
-    if amount is None or amount >= len(ProfessorCourse.nodes):
-        return ProfessorCourse.nodes.all()
-    return ProfessorCourse.nodes.all()[:amount]
+def resolve_professor_course(obj, info, uid=None):
+    if obj is not None:
+        return obj.course.all()[0]
+    return get_nodes_by_uid_or_none_of(ProfessorCourse, uid)
+
+
+def resolve_all_professor_courses(obj, info, amount: int = None):
+    if obj is not None:
+        if amount is None or amount >= len(obj.professor_courses):
+            print(obj.professor_courses.all())
+            return obj.professor_courses.all()
+        return obj.professor_courses.all()[:amount]
+    return get_amount_or_all_of(ProfessorCourse, amount)
 
 
 def resolve_create_professor_course(_, info, is_active: bool = None, uid_course: str = None, uid_professor: str = None,

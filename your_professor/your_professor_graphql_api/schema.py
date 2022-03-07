@@ -30,9 +30,11 @@ type_defs = gql("""
         allScienceDomains(amount: Int): [ScienceDomain!]
         course(uid: String!): Course
         allCourses(amount: Int): [Course!]
-        
-        allProfessors(amount: Int): [Professor!]!
+        professorCourse(uid: String!): ProfessorCourse
         allProfessorCourses(amount: Int): [ProfessorCourse!]!
+        professor(uid: String): Professor
+        allProfessors(amount: Int): [Professor!]!
+        
     }
     type Country{
         uid: String!
@@ -108,6 +110,15 @@ type_defs = gql("""
         is_obligatory: Boolean!
         semester: Int!
         specializations: [Specialization!]!
+        professor_courses: [ProfessorCourse!]
+    }
+    
+    type ProfessorCourse{
+        uid: String!
+        is_active: Boolean!
+        course: Course!
+        professor: Professor!
+        is_professor_lecturer: Boolean!
     }
     
     type Professor{
@@ -118,15 +129,9 @@ type_defs = gql("""
         birth_year: Int
         is_male: Boolean!
         degree: String!
+        professor_courses: [ProfessorCourse!]
     }
     
-    type ProfessorCourse{
-        uid: String!
-        is_active: Boolean!
-        course: Course!
-        professor: Professor!
-        is_professor_lecturer: Boolean!
-    }
     
     scalar Datetime
     
@@ -341,9 +346,8 @@ schema = make_executable_schema(type_defs,
                                 specialization,
                                 science_domain,
                                 course,
-
-                                professor_course,
                                 professor,
+                                professor_course,
                                 datetime_scalar)
 
 app = GraphQL(schema, debug=True)

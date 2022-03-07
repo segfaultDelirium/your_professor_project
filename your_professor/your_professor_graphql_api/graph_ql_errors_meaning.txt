@@ -6,3 +6,4 @@ graphql errors explanation:
 	
 "Cannot return null for non-nullable field Region.uid.":
     schema ObjectType is probably not imported to the schema.py or is not in argument of make_executable_schema()
+    OR check the schema for correct type, for example: `regions: Region!` instead of `regions: [Region!]`

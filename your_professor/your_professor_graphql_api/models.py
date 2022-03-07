@@ -99,7 +99,7 @@ class Course(StructuredNode):  # example "Python in the enterprise" or "Bazy dan
     semester = IntegerProperty()
     review = RelationshipFrom('Review', "reviews", cardinality=ZeroOrMore)
     specializations = RelationshipFrom(Specialization, "HAS_COURSE", cardinality=OneOrMore)
-    professor_course = RelationshipTo("ProfessorCourse", "IS_TAUGHT_BY")
+    professor_courses = RelationshipTo("ProfessorCourse", "IS_TAUGHT_BY")
 
 
 class ProfessorCourse(StructuredNode):
@@ -119,7 +119,7 @@ class Professor(StructuredNode):
     birth_year = IntegerProperty()
     is_male = BooleanProperty(required=True)
     degree = StringProperty(required=True, choices=DEGREES)
-    professor_course = RelationshipTo(ProfessorCourse, "TEACHES", cardinality=ZeroOrMore)
+    professor_courses = RelationshipTo(ProfessorCourse, "TEACHES")
 
 
 class ReactsTo(StructuredRel):

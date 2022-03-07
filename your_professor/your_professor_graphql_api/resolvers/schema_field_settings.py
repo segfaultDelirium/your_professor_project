@@ -10,9 +10,10 @@ from .resolvers_faculty import resolve_create_faculty, resolve_update_faculty, r
     resolve_all_faculties
 from .resolvers_professor import resolve_create_professor, resolve_delete_professor, resolve_update_professor, \
     resolve_connect_professor_to_professor_course, resolve_reconnect_professor_to_professor_course, \
-    resolve_disconnect_professor_from_professor_course, resolve_all_professors, resolve_professor_course_professor
+    resolve_disconnect_professor_from_professor_course, resolve_all_professors, \
+    resolve_professor
 from .resolvers_professor_course import resolve_create_professor_course, resolve_update_professor_course, \
-    resolve_delete_professor_course, resolve_all_professor_courses
+    resolve_delete_professor_course, resolve_all_professor_courses, resolve_professor_course
 from .resolvers_region import (resolve_update_region, resolve_create_region, resolve_delete_region, resolve_region,
                                resolve_all_regions)
 from .resolvers_science_domain import resolve_science_domain, resolve_all_science_domains, \
@@ -33,9 +34,8 @@ faculty = ObjectType("Faculty")
 specialization = ObjectType("Specialization")
 science_domain = ObjectType("ScienceDomain")
 course = ObjectType("Course")
-
-professor = ObjectType("Professor")
 professor_course = ObjectType("ProfessorCourse")
+professor = ObjectType("Professor")
 
 query.set_field("country", resolve_country)
 region.set_field("country", resolve_country)
@@ -98,13 +98,17 @@ mutation.set_field("createCourse", resolve_create_course)
 mutation.set_field("updateCourse", resolve_update_course)
 mutation.set_field("deleteCourse", resolve_delete_course)
 
+query.set_field("professorCourse", resolve_professor_course)
 query.set_field("allProfessorCourses", resolve_all_professor_courses)
+professor.set_field("professor_courses", resolve_all_professor_courses)
+course.set_field("professor_courses", resolve_all_professor_courses)
 mutation.set_field("createProfessorCourse", resolve_create_professor_course)
 mutation.set_field("updateProfessorCourse", resolve_update_professor_course)
 mutation.set_field("deleteProfessorCourse", resolve_delete_professor_course)
 
+query.set_field("professor", resolve_professor)
 query.set_field("allProfessors", resolve_all_professors)
-professor_course.set_field("professor", resolve_professor_course_professor)
+professor_course.set_field("professor", resolve_professor)
 mutation.set_field("createProfessor", resolve_create_professor)
 mutation.set_field("updateProfessor", resolve_update_professor)
 mutation.set_field("connectProfessorToProfessorCourse", resolve_connect_professor_to_professor_course)

@@ -1,22 +1,21 @@
 from ..models import ProfessorCourse, Professor
 from ..mutation_payloads import create_mutation_payload, \
     create_mutation_payload_professor
+from .resolver_utils import get_amount_or_all_of, get_nodes_by_uid_or_none_of
 
 
-def resolve_professor_course_professor(obj, info, uid):
+def resolve_professor(obj, info, uid=None):
     if obj is not None:
-        return obj.country.all()[0]
-    try:
-        return Professor.nodes.get(uid=uid)
-    except Professor.DoesNotExist:
-        return None
+        return obj.professor.all()[0]
+    return get_nodes_by_uid_or_none_of(Professor, uid)
 
 
-def resolve_all_professors(_, info, amount: int = None):
-    print("in resolve_all_professors, amount = ", amount)
-    if amount is None or amount >= len(Professor.nodes):
-        return Professor.nodes.all()
-    return Professor.nodes.all()[:amount]
+def resolve_all_professors(obj, info, amount: int = None):
+    if obj is not None:
+        if amount is None or amount >= len(obj.professors):
+            return obj.professors.all()
+        return obj.professors.all()[:amount]
+    return get_amount_or_all_of(Professor, amount)
 
 
 def resolve_create_professor(_, info, first_name: str, last_name: str, is_active: bool = None, birth_year: int = None,
@@ -103,7 +102,7 @@ def resolve_reconnect_professor_to_professor_course(_, info, uid: str, uid_old_p
     try:
         professor = Professor.nodes.get(uid=uid)
         new_professor_course = ProfessorCourse.nodes.get(uid=uid_new_professor_course)
-        professor.professor_course.reconnect(old_node=old_professor_course, new_node=new_professor_course)
+        professor.professor_courses.reconnect(old_node=old_professor_course, new_node=new_professor_course)
         professor.save()
         return create_mutation_payload_professor(True, professor=professor)
     except Professor.DoesNotExist:
@@ -118,7 +117,7 @@ def resolve_disconnect_professor_from_professor_course(_, info, uid: str, uid_pr
     try:
         professor = Professor.nodes.get(uid=uid)
         professor_course = ProfessorCourse.nodes.get(uid=uid_professor_course)
-        professor.professor_course.disconnect(professor_course)
+        professor.professor_courses.disconnect(professor_course)
         professor.save()
         return create_mutation_payload_professor(True, professor=professor)
     except Professor.DoesNotExist:
@@ -131,7 +130,7 @@ def resolve_disconnect_professor_from_professor_course(_, info, uid: str, uid_pr
 def resolve_delete_professor(_, info, uid: str, force: bool = False):
     try:
         professor = Professor.nodes.get(uid=uid)
-        if not force and len(professor.professor_course.all()) != 0:
+        if not force and len(professor.professor_courses.all()) != 0:
             return create_mutation_payload(False,
                                            "Professor you are trying to delete has Courses attached, "
                                            "please disconnect them before deleting it.")
