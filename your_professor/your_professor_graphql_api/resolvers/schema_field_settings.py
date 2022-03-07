@@ -23,6 +23,7 @@ from .resolvers_specialization import resolve_create_specialization, resolve_del
     resolve_update_specialization, resolve_specialization, resolve_all_specialization
 from .resolvers_university import resolve_create_university, resolve_update_university, \
     resolve_delete_university, resolve_university, resolve_all_universities
+from .resolvers_user import resolve_user, resolve_all_users
 
 query = QueryType()
 mutation = MutationType()
@@ -36,6 +37,7 @@ science_domain = ObjectType("ScienceDomain")
 course = ObjectType("Course")
 professor_course = ObjectType("ProfessorCourse")
 professor = ObjectType("Professor")
+user = ObjectType("User")
 
 query.set_field("country", resolve_country)
 region.set_field("country", resolve_country)
@@ -115,3 +117,6 @@ mutation.set_field("connectProfessorToProfessorCourse", resolve_connect_professo
 mutation.set_field("reconnectProfessorToProfessorCourse", resolve_reconnect_professor_to_professor_course)
 mutation.set_field("disconnectProfessorFromProfessorCourse", resolve_disconnect_professor_from_professor_course)
 mutation.set_field("deleteProfessor", resolve_delete_professor)
+
+query.set_field("user", resolve_user)
+query.set_field("allUsers", resolve_all_users)

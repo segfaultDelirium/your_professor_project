@@ -13,7 +13,6 @@ def resolve_professor_course(obj, info, uid=None):
 def resolve_all_professor_courses(obj, info, amount: int = None):
     if obj is not None:
         if amount is None or amount >= len(obj.professor_courses):
-            print(obj.professor_courses.all())
             return obj.professor_courses.all()
         return obj.professor_courses.all()[:amount]
     return get_amount_or_all_of(ProfessorCourse, amount)

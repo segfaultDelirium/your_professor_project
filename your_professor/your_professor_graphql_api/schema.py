@@ -2,7 +2,8 @@ from ariadne import (QueryType, ObjectType, ScalarType,
                      gql, make_executable_schema)
 from ariadne.asgi import GraphQL
 from .resolvers.schema_field_settings import (mutation, query, country, region, city, university, faculty,
-                                              specialization, science_domain, course, professor_course, professor)
+                                              specialization, science_domain, course, professor_course, professor,
+                                              user, )
 
 datetime_scalar = ScalarType("Datetime")
 
@@ -31,9 +32,11 @@ type_defs = gql("""
         course(uid: String!): Course
         allCourses(amount: Int): [Course!]
         professorCourse(uid: String!): ProfessorCourse
-        allProfessorCourses(amount: Int): [ProfessorCourse!]!
-        professor(uid: String): Professor
-        allProfessors(amount: Int): [Professor!]!
+        allProfessorCourses(amount: Int): [ProfessorCourse!]
+        professor(uid: String!): Professor
+        allProfessors(amount: Int): [Professor!]
+        user(uid: String!): User
+        allUsers(amount: Int): [User!] 
         
     }
     type Country{
@@ -89,6 +92,7 @@ type_defs = gql("""
         science_domains: [ScienceDomain!]!
         courses: [Course!]!
         faculty: Faculty!
+        users: [User!]
     }
     
     type ScienceDomain{
@@ -111,6 +115,7 @@ type_defs = gql("""
         semester: Int!
         specializations: [Specialization!]!
         professor_courses: [ProfessorCourse!]
+        users: [User!]
     }
     
     type ProfessorCourse{
@@ -348,6 +353,7 @@ schema = make_executable_schema(type_defs,
                                 course,
                                 professor,
                                 professor_course,
+                                user,
                                 datetime_scalar)
 
 app = GraphQL(schema, debug=True)
