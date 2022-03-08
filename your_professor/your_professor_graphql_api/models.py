@@ -77,6 +77,7 @@ class Specialization(StructuredNode):  # example "informatyka stosowana", "fizyk
     science_domains = RelationshipTo("ScienceDomain", "IS_PART_OF_DOMAIN", cardinality=ZeroOrMore)
     courses = RelationshipTo("Course", "HAS_COURSE", cardinality=ZeroOrMore)
     review = RelationshipFrom('Review', "reviews", cardinality=ZeroOrMore)
+    users = RelationshipFrom("User", "STUDIES", cardinality=ZeroOrMore)
 
 
 class ScienceDomain(StructuredNode):  # example biology, computer science
@@ -100,6 +101,7 @@ class Course(StructuredNode):  # example "Python in the enterprise" or "Bazy dan
     review = RelationshipFrom('Review', "reviews", cardinality=ZeroOrMore)
     specializations = RelationshipFrom(Specialization, "HAS_COURSE", cardinality=OneOrMore)
     professor_courses = RelationshipTo("ProfessorCourse", "IS_TAUGHT_BY")
+    users = RelationshipFrom("User", "TAKES_PART_IN", cardinality=ZeroOrMore)
 
 
 class ProfessorCourse(StructuredNode):
@@ -140,7 +142,8 @@ class User(StructuredNode):
     last_name = StringProperty(max_length=100)
     date_joined = DateTimeProperty(default_now=True)
     birthday = DateProperty()
-    course = RelationshipTo(ProfessorCourse, "TAKES_PART_IN", cardinality=ZeroOrMore)
+    is_male = BooleanProperty()
+    course = RelationshipTo(Course, "TAKES_PART_IN", cardinality=ZeroOrMore)
     specialization = RelationshipTo(Specialization, "STUDIES", cardinality=ZeroOrMore)
     reactsToReview = RelationshipTo('Review', "REACTS_TO", model=ReactsTo, cardinality=ZeroOrMore)
     reactsToReply = RelationshipTo('Reply', "REACTS_TO", model=ReactsTo, cardinality=ZeroOrMore)

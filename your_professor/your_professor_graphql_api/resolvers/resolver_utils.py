@@ -1,7 +1,9 @@
 from neomodel import StructuredNode
 from py2neo import Graph, errors
 from your_professor.settings import neo4j_login, neo4j_password # ignore red underline, it's all good!
-
+from datetime import datetime
+from ..mutation_payloads import create_mutation_payload
+from ..constants import BIRTHDAY_FORMAT
 
 def get_nodes_by_uid_or_none_of(node_class: StructuredNode, uid: str):
     try:
@@ -25,6 +27,16 @@ def check_database_connection(f):
             raise errors.ConnectionUnavailable("connection to database could not be established")
         return f(*args, **kwargs)
     return wrapper
+
+
+def check_birthday_format(birthday: str, birthday_format: str = BIRTHDAY_FORMAT):
+    try:
+        birthday = datetime.strptime(birthday, birthday_format)
+        return {"status": True, "birthday": birthday}
+    except ValueError as e:
+        return create_mutation_payload(False, error=f"incorrect birthday date formatting, "
+                                                    f"you should use {birthday_format} format")
+
 
 # def check_database_connection():
 #     try:

@@ -1,29 +1,16 @@
 from ariadne import (MutationType, QueryType, ObjectType)
 
-from .resolvers_city import resolve_create_city, resolve_update_city, resolve_delete_city, resolve_all_cities, \
-    resolve_city
-from .resolvers_country import (resolve_create_country_by_ISO,
-                                resolve_update_country, resolve_delete_country, resolve_country, resolve_all_countries)
-from .resolvers_course import resolve_create_course, resolve_delete_course, resolve_update_course, resolve_course, \
-    resolve_all_courses
-from .resolvers_faculty import resolve_create_faculty, resolve_update_faculty, resolve_delete_faculty, resolve_faculty, \
-    resolve_all_faculties
-from .resolvers_professor import resolve_create_professor, resolve_delete_professor, resolve_update_professor, \
-    resolve_connect_professor_to_professor_course, resolve_reconnect_professor_to_professor_course, \
-    resolve_disconnect_professor_from_professor_course, resolve_all_professors, \
-    resolve_professor
-from .resolvers_professor_course import resolve_create_professor_course, resolve_update_professor_course, \
-    resolve_delete_professor_course, resolve_all_professor_courses, resolve_professor_course
-from .resolvers_region import (resolve_update_region, resolve_create_region, resolve_delete_region, resolve_region,
-                               resolve_all_regions)
-from .resolvers_science_domain import resolve_science_domain, resolve_all_science_domains, \
-    resolve_create_science_domain, resolve_update_science_domain, resolve_delete_science_domain, \
-    resolve_connect_science_domain_to_specialization, resolve_disconnect_science_domain_from_specialization
-from .resolvers_specialization import resolve_create_specialization, resolve_delete_specialization, \
-    resolve_update_specialization, resolve_specialization, resolve_all_specialization
-from .resolvers_university import resolve_create_university, resolve_update_university, \
-    resolve_delete_university, resolve_university, resolve_all_universities
-from .resolvers_user import resolve_user, resolve_all_users
+from .resolvers_city import *
+from .resolvers_country import *
+from .resolvers_course import *
+from .resolvers_faculty import *
+from .resolvers_professor import *
+from .resolvers_professor_course import *
+from .resolvers_region import *
+from .resolvers_science_domain import *
+from .resolvers_specialization import *
+from .resolvers_university import *
+from .resolvers_user import *
 
 query = QueryType()
 mutation = MutationType()
@@ -120,3 +107,12 @@ mutation.set_field("deleteProfessor", resolve_delete_professor)
 
 query.set_field("user", resolve_user)
 query.set_field("allUsers", resolve_all_users)
+specialization.set_field("users", resolve_all_users)
+course.set_field("users", resolve_all_users)
+mutation.set_field("createUser", resolve_create_user)
+mutation.set_field("updateUser", resolve_update_user)
+mutation.set_field("connectUserToSpecialization", resolve_connect_user_to_specialization)
+mutation.set_field("disconnectUserFromSpecialization", resolve_disconnect_user_from_specialization)
+mutation.set_field("connectUserToCourse", resolve_connect_user_to_course)
+mutation.set_field("disconnectUserFromCourse", resolve_disconnect_user_from_course)
+mutation.set_field("deleteUser", resolve_delete_user)

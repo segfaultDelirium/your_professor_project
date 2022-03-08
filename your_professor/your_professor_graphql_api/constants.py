@@ -1,4 +1,6 @@
 DEGREES = {'0': 'no_degree', '1': "bachelor", '2': "master", '3': "doctor"}
+BIRTHDAY_FORMAT = "%Y-%m-%d"
+LOGIN_TIMESTAMP_FORMAT = "%Y-%m-%d %h-%m-%s"
 COUNTRIES = {
     "AD": "Andorra",
     "AE": "United Arab Emirates",
