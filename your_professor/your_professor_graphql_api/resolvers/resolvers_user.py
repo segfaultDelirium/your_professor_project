@@ -152,56 +152,6 @@ def resolve_disconnect_user_from_course(_, info, uid: str, uid_course: str):
         return create_mutation_payload(False, error=f"Course of {uid_course=} could not be found.")
 
 
-# def resolve_connect_professor_to_professor_course(_, info, uid: str, uid_professor_course: str):
-#     try:
-#         professor = Professor.nodes.get(uid=uid)
-#         professor_course = ProfessorCourse.nodes.get(uid=uid_professor_course)
-#         professor.professor_course.connect(professor_course)
-#         professor.save()
-#         return create_mutation_payload_professor(True, professor=professor)
-#     except Professor.DoesNotExist:
-#         return create_mutation_payload(False, error=f"Professor of uid {uid} could not be found.")
-#     except ProfessorCourse.DoesNotExist:
-#         return create_mutation_payload(False,
-#                                        error=f"ProfessorCourse of uid {uid_professor_course} could not be found.")
-#
-#
-# def resolve_reconnect_professor_to_professor_course(_, info, uid: str, uid_old_professor_course: str,
-#                                                     uid_new_professor_course: str):
-#     old_professor_course = None
-#     try:
-#         old_professor_course = ProfessorCourse.nodes.get(uid=uid_old_professor_course)
-#     except ProfessorCourse.DoesNotExist:
-#         return create_mutation_payload(False,
-#                                        error=f"Old ProfessorCourse of uid {uid_old_professor_course} "
-#                                              "could not be found.")
-#     try:
-#         professor = Professor.nodes.get(uid=uid)
-#         new_professor_course = ProfessorCourse.nodes.get(uid=uid_new_professor_course)
-#         professor.professor_courses.reconnect(old_node=old_professor_course, new_node=new_professor_course)
-#         professor.save()
-#         return create_mutation_payload_professor(True, professor=professor)
-#     except Professor.DoesNotExist:
-#         return create_mutation_payload(False, error=f"Professor of uid {uid} could not be found.")
-#     except ProfessorCourse.DoesNotExist:
-#         return create_mutation_payload(False,
-#                                        error=f"New ProfessorCourse of uid {uid_old_professor_course} "
-#                                              "could not be found.")
-#
-#
-# def resolve_disconnect_professor_from_professor_course(_, info, uid: str, uid_professor_course: str):
-#     try:
-#         professor = Professor.nodes.get(uid=uid)
-#         professor_course = ProfessorCourse.nodes.get(uid=uid_professor_course)
-#         professor.professor_courses.disconnect(professor_course)
-#         professor.save()
-#         return create_mutation_payload_professor(True, professor=professor)
-#     except Professor.DoesNotExist:
-#         return create_mutation_payload(False, error=f"Professor of uid {uid} could not be found.")
-#     except ProfessorCourse.DoesNotExist:
-#         return create_mutation_payload(False,
-#                                        error=f"ProfessorCourse of uid {uid_professor_course} could not be found.")
-
 @check_database_connection
 def resolve_delete_user(_, info, uid: str, force: bool = False):
     try:

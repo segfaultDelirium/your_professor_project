@@ -11,6 +11,7 @@ from .resolvers_science_domain import *
 from .resolvers_specialization import *
 from .resolvers_university import *
 from .resolvers_user import *
+from .resolvers_tag import *
 
 query = QueryType()
 mutation = MutationType()
@@ -116,3 +117,10 @@ mutation.set_field("disconnectUserFromSpecialization", resolve_disconnect_user_f
 mutation.set_field("connectUserToCourse", resolve_connect_user_to_course)
 mutation.set_field("disconnectUserFromCourse", resolve_disconnect_user_from_course)
 mutation.set_field("deleteUser", resolve_delete_user)
+
+query.set_field("tag", resolve_create_tag)
+query.set_field("allTags", resolve_all_tags)
+mutation.set_field("createTag", resolve_create_tag)
+mutation.set_field("updateTag", resolve_update_tag)
+mutation.set_field("deleteTag", resolve_delete_tag)
+

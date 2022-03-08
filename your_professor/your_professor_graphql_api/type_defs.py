@@ -23,6 +23,8 @@ type_defs = gql("""
         allProfessors(amount: Int): [Professor!]
         user(uid: String!): User
         allUsers(amount: Int): [User!] 
+        tag(uid: String!): Tag
+        allTags(amount: Int): [Tag!]
 
     }
     type Country{
@@ -159,6 +161,11 @@ type_defs = gql("""
         specializations: [Specialization!]
     }
 
+    type Tag{
+        uid: String!
+        tag: String!
+    }
+
     type Mutation{
         createCountryByISO(local_language_name: String!,
             ISO_code_name: String!): MutationPayloadCountry!
@@ -258,6 +265,11 @@ type_defs = gql("""
         connectUserToCourse(uid: String!, uid_course: String!): MutationPayloadUser!
         disconnectUserFromCourse(uid: String!, uid_course: String!): MutationPayloadUser!
         deleteUser(uid: String!): MutationPayload!
+        
+        createTag(tag: String!): MutationPayloadTag!
+        updateTag(uid: String!, tag: String!): MutationPayloadTag!
+        deleteTag(uid: String!): MutationPayload!
+        
     
 
     }
@@ -330,6 +342,12 @@ type_defs = gql("""
         status: Boolean!
         error: String
         user: User
+    }
+    
+    type MutationPayloadTag{
+        status: Boolean!
+        error: String
+        tag: Tag
     }
 
 

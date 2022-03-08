@@ -152,6 +152,7 @@ class User(StructuredNode):
 class Tag(StructuredNode):
     uid = UniqueIdProperty()
     tag = StringProperty(max_length=50, required=True)
+    Review = RelationshipFrom("Review", "IS_TAGGED", cardinality=ZeroOrMore)
 
 
 class Review(StructuredNode):
@@ -166,7 +167,7 @@ class Review(StructuredNode):
     # if by mistake you put a `required=True` as argument to RelationshipFrom,
     # it will throw exception `neomodel.exceptions.NodeClassAlreadyDefined: <exception str() failed>`
     # instead use cardinality
-    tag = RelationshipTo(Tag, "IS_TAGGED", cardinality=ZeroOrMore)
+    tags = RelationshipTo(Tag, "IS_TAGGED", cardinality=ZeroOrMore)
     creation_date = DateTimeProperty(default_now=True)
     most_recent_edit_date = DateTimeProperty()
 
