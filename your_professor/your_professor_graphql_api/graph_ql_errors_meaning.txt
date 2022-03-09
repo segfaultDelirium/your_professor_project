@@ -7,3 +7,7 @@ graphql errors explanation:
 "Cannot return null for non-nullable field Region.uid.":
     schema ObjectType is probably not imported to the schema.py or is not in argument of make_executable_schema()
     OR check the schema for correct type, for example: `regions: Region!` instead of `regions: [Region!]`
+
+if by mistake you put a `required=True` as argument to RelationshipFrom,
+    it will throw exception `neomodel.exceptions.NodeClassAlreadyDefined: <exception str() failed>`
+    instead use cardinality

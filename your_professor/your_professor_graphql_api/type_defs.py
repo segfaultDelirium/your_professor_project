@@ -25,7 +25,8 @@ type_defs = gql("""
         allUsers(amount: Int): [User!] 
         tag(uid: String!): Tag
         allTags(amount: Int): [Tag!]
-
+        review(uid: String!): Review
+        allReviews(amount: Int): [Review!]
     }
     type Country{
         uid: String!
@@ -134,17 +135,6 @@ type_defs = gql("""
         day: Int!
     }
 
-    # type Time{
-    #     hour: Int!
-    #     minute: Int!
-    #     second: Int!
-    # }
-    # 
-    # type DateTime{
-    #     date: Date!
-    #     time: Time!
-    # }
-
     type User{
         uid: String!
         is_active: Boolean!
@@ -164,6 +154,19 @@ type_defs = gql("""
     type Tag{
         uid: String!
         tag: String!
+        reviews: [Review!]
+    }
+    
+    type Review{
+        uid: String!
+        is_text_visible: Boolean!
+        text: String
+        quality: String!
+        difficulty: String
+        author: User!
+        tags: [Tag!]
+        creation_date: Datetime!
+        most_recent_edit_date: Datetime
     }
 
     type Mutation{
@@ -270,7 +273,8 @@ type_defs = gql("""
         updateTag(uid: String!, tag: String!): MutationPayloadTag!
         deleteTag(uid: String!): MutationPayload!
         
-    
+        createReview(is_text_visible: Boolean, text: String, quality: String!, difficulty: String, uid_author: String!,
+            tags: [String!], creation_date: Datetime): MutationPayloadReview!
 
     }
 
@@ -348,6 +352,12 @@ type_defs = gql("""
         status: Boolean!
         error: String
         tag: Tag
+    }
+    
+    type MutationPayloadReview{
+        status: Boolean!
+        error: String
+        review: Review
     }
 
 

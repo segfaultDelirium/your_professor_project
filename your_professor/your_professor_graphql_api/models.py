@@ -1,6 +1,5 @@
 from django.db import models
-from .constants import DEGREES, COUNTRIES
-
+from .constants import DEGREES, COUNTRIES, QUALITY, DIFFICULTY
 # Create your models here.
 
 from django_neomodel import DjangoNode
@@ -54,7 +53,7 @@ class University(StructuredNode):  # example University of science and technolog
     is_active = BooleanProperty(default=True)
     founding_year = IntegerProperty(required=False)
     city = RelationshipFrom(City, "HOSTS_UNIVERSITY", cardinality=One)
-    review = RelationshipFrom('Review', "reviews", cardinality=ZeroOrMore)
+    reviews = RelationshipFrom('Review', "REVIEWS", cardinality=ZeroOrMore)
     faculties = RelationshipTo("Faculty", "HAS_FACULTY", cardinality=ZeroOrMore)
 
 
@@ -63,7 +62,7 @@ class Faculty(StructuredNode):  # example "wydzial fizyki i informatyki stosowan
     name = StringProperty(max_length=100)
     is_active = BooleanProperty(default=True)
     university = RelationshipFrom(University, "HAS_FACULTY", cardinality=One)
-    review = RelationshipFrom('Review', "reviews", cardinality=ZeroOrMore)
+    reviews = RelationshipFrom('Review', "REVIEWS", cardinality=ZeroOrMore)
     specializations = RelationshipTo("Specialization", "HAS_SPECIALIZATION", cardinality=ZeroOrMore)
 
 
@@ -76,7 +75,7 @@ class Specialization(StructuredNode):  # example "informatyka stosowana", "fizyk
     faculty = RelationshipFrom(Faculty, "HAS_SPECIALIZATION", cardinality=One)
     science_domains = RelationshipTo("ScienceDomain", "IS_PART_OF_DOMAIN", cardinality=ZeroOrMore)
     courses = RelationshipTo("Course", "HAS_COURSE", cardinality=ZeroOrMore)
-    review = RelationshipFrom('Review', "reviews", cardinality=ZeroOrMore)
+    reviews = RelationshipFrom('Review', "REVIEWS", cardinality=ZeroOrMore)
     users = RelationshipFrom("User", "STUDIES", cardinality=ZeroOrMore)
 
 
@@ -98,7 +97,7 @@ class Course(StructuredNode):  # example "Python in the enterprise" or "Bazy dan
     ECTS = IntegerProperty()
     is_obligatory = BooleanProperty()
     semester = IntegerProperty()
-    review = RelationshipFrom('Review', "reviews", cardinality=ZeroOrMore)
+    reviews = RelationshipFrom('Review', "REVIEWS", cardinality=ZeroOrMore)
     specializations = RelationshipFrom(Specialization, "HAS_COURSE", cardinality=OneOrMore)
     professor_courses = RelationshipTo("ProfessorCourse", "IS_TAUGHT_BY")
     users = RelationshipFrom("User", "TAKES_PART_IN", cardinality=ZeroOrMore)
@@ -110,7 +109,7 @@ class ProfessorCourse(StructuredNode):
     course = RelationshipFrom(Course, "IS_TAUGHT_BY", cardinality=ZeroOrOne)
     professor = RelationshipFrom("Professor", "TEACHES", cardinality=ZeroOrOne)
     is_professor_lecturer = BooleanProperty(required=True)
-    review = RelationshipFrom('Review', "reviews")
+    reviews = RelationshipFrom('Review', "REVIEWS")
 
 
 class Professor(StructuredNode):
@@ -147,29 +146,32 @@ class User(StructuredNode):
     specialization = RelationshipTo(Specialization, "STUDIES", cardinality=ZeroOrMore)
     reactsToReview = RelationshipTo('Review', "REACTS_TO", model=ReactsTo, cardinality=ZeroOrMore)
     reactsToReply = RelationshipTo('Reply', "REACTS_TO", model=ReactsTo, cardinality=ZeroOrMore)
+    reviews = RelationshipTo("Review", "CREATED_REVIEW", cardinality=ZeroOrMore)
 
 
 class Tag(StructuredNode):
     uid = UniqueIdProperty()
     tag = StringProperty(max_length=50, required=True)
-    Review = RelationshipFrom("Review", "IS_TAGGED", cardinality=ZeroOrMore)
+    reviews = RelationshipFrom("Review", "IS_TAGGED", cardinality=ZeroOrMore)
 
 
 class Review(StructuredNode):
     uid = UniqueIdProperty()
-    is_text_visible = BooleanProperty(required=True)
+    is_text_visible = BooleanProperty(default=True)
     text = StringProperty(max_length=3000)
-    QUALITY = {1: "The worst", 2: "bad", 3: "ok", 4: "good", 5: "great"}
     quality = StringProperty(choices=QUALITY, required=True)
-    DIFFICULTY = {1: "Very difficult", 2: "difficult", 3: "moderate", 4: "easy", 5: "very easy"}
     difficulty = StringProperty(choices=DIFFICULTY, required=False)
     author = RelationshipFrom(User, "CREATED_REVIEW", cardinality=One)
-    # if by mistake you put a `required=True` as argument to RelationshipFrom,
-    # it will throw exception `neomodel.exceptions.NodeClassAlreadyDefined: <exception str() failed>`
-    # instead use cardinality
     tags = RelationshipTo(Tag, "IS_TAGGED", cardinality=ZeroOrMore)
     creation_date = DateTimeProperty(default_now=True)
     most_recent_edit_date = DateTimeProperty()
+    # only one of following relations should be connected
+    university = RelationshipTo(University, "REVIEWS", cardinality=ZeroOrOne)
+    faculty = RelationshipTo(Faculty, "REVIEWS", cardinality=ZeroOrOne)
+    specialization = RelationshipTo(Specialization, "REVIEWS", cardinality=ZeroOrOne)
+    course = RelationshipTo(Course, "REVIEWS", cardinality=ZeroOrOne)
+    professor_course = RelationshipTo(ProfessorCourse, "REVIEWS", cardinality=ZeroOrOne)
+
 
 
 class Reply(StructuredNode):

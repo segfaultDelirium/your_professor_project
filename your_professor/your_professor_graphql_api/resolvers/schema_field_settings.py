@@ -1,17 +1,6 @@
 from ariadne import (MutationType, QueryType, ObjectType)
 
-from .resolvers_city import *
-from .resolvers_country import *
-from .resolvers_course import *
-from .resolvers_faculty import *
-from .resolvers_professor import *
-from .resolvers_professor_course import *
-from .resolvers_region import *
-from .resolvers_science_domain import *
-from .resolvers_specialization import *
-from .resolvers_university import *
-from .resolvers_user import *
-from .resolvers_tag import *
+from . import *  # imports all imports from __init__.py
 
 query = QueryType()
 mutation = MutationType()
@@ -26,6 +15,8 @@ course = ObjectType("Course")
 professor_course = ObjectType("ProfessorCourse")
 professor = ObjectType("Professor")
 user = ObjectType("User")
+tag = ObjectType("Tag")
+review = ObjectType("Review")
 
 query.set_field("country", resolve_country)
 region.set_field("country", resolve_country)
@@ -50,6 +41,7 @@ mutation.set_field("updateCity", resolve_update_city)
 mutation.set_field("deleteCity", resolve_delete_city)
 
 query.set_field("university", resolve_university)
+review.set_field("university", resolve_university)
 faculty.set_field("university", resolve_university)
 query.set_field("allUniversities", resolve_all_universities)
 city.set_field("universities", resolve_all_universities)
@@ -58,6 +50,7 @@ mutation.set_field("updateUniversity", resolve_update_university)
 mutation.set_field("deleteUniversity", resolve_delete_university)
 
 query.set_field("faculty", resolve_faculty)
+review.set_field("faculty", resolve_faculty)
 specialization.set_field("faculty", resolve_faculty)
 query.set_field("allFaculties", resolve_all_faculties)
 university.set_field("faculties", resolve_all_faculties)
@@ -66,6 +59,7 @@ mutation.set_field("updateFaculty", resolve_update_faculty)
 mutation.set_field("deleteFaculty", resolve_delete_faculty)
 
 query.set_field("specialization", resolve_specialization)
+review.set_field("specialization", resolve_specialization)
 query.set_field("allSpecializations", resolve_all_specialization)
 faculty.set_field("specializations", resolve_all_specialization)
 course.set_field("specializations", resolve_all_specialization)
@@ -83,12 +77,14 @@ mutation.set_field("disconnectScienceDomainFromSpecialization", resolve_disconne
 mutation.set_field("deleteScienceDomain", resolve_delete_science_domain)
 
 query.set_field("course", resolve_course)
+review.set_field("course", resolve_course)
 query.set_field("allCourses", resolve_all_courses)
 mutation.set_field("createCourse", resolve_create_course)
 mutation.set_field("updateCourse", resolve_update_course)
 mutation.set_field("deleteCourse", resolve_delete_course)
 
 query.set_field("professorCourse", resolve_professor_course)
+review.set_field("professorCourse", resolve_professor_course)
 query.set_field("allProfessorCourses", resolve_all_professor_courses)
 professor.set_field("professor_courses", resolve_all_professor_courses)
 course.set_field("professor_courses", resolve_all_professor_courses)
@@ -107,6 +103,7 @@ mutation.set_field("disconnectProfessorFromProfessorCourse", resolve_disconnect_
 mutation.set_field("deleteProfessor", resolve_delete_professor)
 
 query.set_field("user", resolve_user)
+review.set_field("author", resolve_user)
 query.set_field("allUsers", resolve_all_users)
 specialization.set_field("users", resolve_all_users)
 course.set_field("users", resolve_all_users)
@@ -124,3 +121,12 @@ mutation.set_field("createTag", resolve_create_tag)
 mutation.set_field("updateTag", resolve_update_tag)
 mutation.set_field("deleteTag", resolve_delete_tag)
 
+query.set_field("review", resolve_review)
+query.set_field("allReviews", resolve_all_reviews)
+tag.set_field("reviews", resolve_all_reviews)
+university.set_field("reviews", resolve_all_reviews)
+faculty.set_field("reviews", resolve_all_reviews)
+specialization.set_field("reviews", resolve_all_reviews)
+course.set_field("reviews", resolve_all_reviews)
+professor_course.set_field("reviews", resolve_all_reviews)
+mutation.set_field("createReview", resolve_create_review)

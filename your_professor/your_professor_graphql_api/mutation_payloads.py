@@ -1,5 +1,5 @@
 from .models import Country, Region, City, University, Faculty, Specialization, Course, ProfessorCourse, Professor, \
-    ScienceDomain, User, Tag
+    ScienceDomain, User, Tag, Review
 
 
 def create_mutation_payload(status: bool, error: str = None, data_type: str = None, data = None):
@@ -61,3 +61,7 @@ def create_mutation_payload_user(status: bool, error: str = None, user: User = N
 
 def create_mutation_payload_tag(status: bool, error: str = None, tag: Tag = None):
     return create_mutation_payload(status, error, "tag", tag)
+
+
+def create_mutation_payload_review(status: bool, error: str = None, review: Review = None):
+    return create_mutation_payload(status, error, "review", review)
