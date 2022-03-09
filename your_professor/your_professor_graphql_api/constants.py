@@ -2,8 +2,38 @@
 DEGREES = {'0': 'no_degree', '1': "bachelor", '2': "master", '3': "doctor"}
 BIRTHDAY_FORMAT = "%Y-%m-%d"
 LOGIN_TIMESTAMP_FORMAT = "%Y-%m-%d %h-%m-%s"
-QUALITY = {'1': "The worst", '2': "bad", '3': "ok", '4': "good", '5': "great"}
-DIFFICULTY = {'1': "Very difficult", '2': "difficult", '3': "moderate", '4': "easy", '5': "very easy"}
+QUALITY = {'1': "terrible", '2': "bad", '3': "ok", '4': "good", '5': "great"}
+DIFFICULTY = {'1': "very difficult", '2': "difficult", '3': "moderate", '4': "easy", '5': "very easy"}
+from enum import Enum
+
+
+class Quality(Enum):
+    TERRIBLE = 1
+    BAD = 2
+    OK = 3
+    GOOD = 4
+    GREAT = 5
+
+
+REVIEWED_NODE_TYPE = {"U" : "University", "F": 'Faculty', "S": "Specialization", "C": "Course", "P": "ProfessorCourse"}
+
+
+def unpack_dict_values_to_schema_enum(dict):
+    res = ""
+    for value in dict.values():
+        res += f'{value}\n'
+    print(res)
+    return res
+
+
+def unpack_dict_keys_to_schema_enum(dict):
+    res = ""
+    for value in dict.keys():
+        res += f'{value}\n'
+    print(res)
+    return res
+
+
 # QUALITY = {1: "The worst", 2: "bad", 3: "ok", 4: "good", 5: "great"}
 # DIFFICULTY = {1: "Very difficult", 2: "difficult", 3: "moderate", 4: "easy", 5: "very easy"}
 PASSWORD_FUNCTION = "sha256"

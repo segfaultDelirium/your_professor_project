@@ -1,5 +1,6 @@
 from django.db import models
-from .constants import DEGREES, COUNTRIES, QUALITY, DIFFICULTY
+from .constants import DEGREES, COUNTRIES, QUALITY, DIFFICULTY, REVIEWED_NODE_TYPE
+from enum import Enum
 # Create your models here.
 
 from django_neomodel import DjangoNode
@@ -165,6 +166,7 @@ class Review(StructuredNode):
     tags = RelationshipTo(Tag, "IS_TAGGED", cardinality=ZeroOrMore)
     creation_date = DateTimeProperty(default_now=True)
     most_recent_edit_date = DateTimeProperty()
+    reviewed_node_type = StringProperty(choices=REVIEWED_NODE_TYPE, required=True)
     # only one of following relations should be connected
     university = RelationshipTo(University, "REVIEWS", cardinality=ZeroOrOne)
     faculty = RelationshipTo(Faculty, "REVIEWS", cardinality=ZeroOrOne)

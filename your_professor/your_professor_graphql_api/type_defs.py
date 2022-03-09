@@ -1,6 +1,7 @@
 from ariadne import gql
-type_defs = gql("""
-    type Query{
+from .constants import REVIEWED_NODE_TYPE, unpack_dict_values_to_schema_enum, unpack_dict_keys_to_schema_enum, QUALITY
+type_defs = gql(f"""
+    type Query{{
         country(local_language_name: String): Country
         allCountries(amount: Int): [Country!]!
         region(uid: String): Region
@@ -27,34 +28,34 @@ type_defs = gql("""
         allTags(amount: Int): [Tag!]
         review(uid: String!): Review
         allReviews(amount: Int): [Review!]
-    }
-    type Country{
+    }}
+    type Country{{
         uid: String!
         local_language_name: String!
         ISO_code_name: String!
         is_active: Boolean!
         regions(amount: Int): [Region!]
-    }
+    }}
 
-    type Region{
+    type Region{{
         uid: String!
         local_language_name: String!
         name: String!
         is_active: Boolean!
         country: Country!
         cities: [City!]!
-    }
+    }}
 
-    type City{
+    type City{{
         uid: String!
         local_language_name: String!
         name: String!
         is_active: Boolean!
         universities: [University!]!
         region: Region!
-    }
+    }}
 
-    type University{
+    type University{{
         uid: String!
         local_language_name: String!
         name: String!
@@ -62,17 +63,19 @@ type_defs = gql("""
         founding_year: Int
         faculties: [Faculty!]
         city: City!
-    }
+        reviews: [Review!]
+    }}
 
-    type Faculty{
+    type Faculty{{
         uid: String!
         name: String!
         is_active: Boolean!
         specializations: [Specialization!]!
         university: University!
-    }
+        reviews: [Review!]
+    }}
 
-    type Specialization{
+    type Specialization{{
         uid: String!
         name: String!
         is_active: Boolean!
@@ -82,17 +85,18 @@ type_defs = gql("""
         courses: [Course!]!
         faculty: Faculty!
         users: [User!]
-    }
+        reviews: [Review!]
+    }}
 
-    type ScienceDomain{
+    type ScienceDomain{{
         uid: String!
         name: String!
         name_in_polish: String
         is_active: Boolean!
         specializations: [Specialization!]
-    }
+    }}
 
-    type Course{
+    type Course{{
         uid: String!
         name: String!
         is_active: Boolean!
@@ -105,17 +109,19 @@ type_defs = gql("""
         specializations: [Specialization!]!
         professor_courses: [ProfessorCourse!]
         users: [User!]
-    }
+        reviews: [Review!]
+    }}
 
-    type ProfessorCourse{
+    type ProfessorCourse{{
         uid: String!
         is_active: Boolean!
         course: Course!
         professor: Professor!
         is_professor_lecturer: Boolean!
-    }
+        reviews: [Review!]
+    }}
 
-    type Professor{
+    type Professor{{
         uid: String
         is_active: Boolean!
         first_name: String!
@@ -124,18 +130,18 @@ type_defs = gql("""
         is_male: Boolean!
         degree: String!
         professor_courses: [ProfessorCourse!]
-    }
+    }}
 
 
     scalar Datetime
 
-    type Date{
+    type Date{{
         year: Int!
         month: Int!
         day: Int!
-    }
+    }}
 
-    type User{
+    type User{{
         uid: String!
         is_active: Boolean!
         username: String!
@@ -149,15 +155,25 @@ type_defs = gql("""
         is_male: Boolean
         courses: [Course!]
         specializations: [Specialization!]
-    }
+    }}
 
-    type Tag{
+    type Tag{{
         uid: String!
         tag: String!
         reviews: [Review!]
-    }
+    }}
     
-    type Review{
+    enum ReviewedNodeType{{
+        {unpack_dict_values_to_schema_enum(REVIEWED_NODE_TYPE)}
+        # University
+        # Faculty
+        # Specialization
+        # Course
+        # ProfessorCourse
+    }}
+
+    
+    type Review{{
         uid: String!
         is_text_visible: Boolean!
         text: String
@@ -167,9 +183,11 @@ type_defs = gql("""
         tags: [Tag!]
         creation_date: Datetime!
         most_recent_edit_date: Datetime
-    }
+        reviewed_node_type: ReviewedNodeType!
+        reviewed_node_uid: String!
+    }}
 
-    type Mutation{
+    type Mutation{{
         createCountryByISO(local_language_name: String!,
             ISO_code_name: String!): MutationPayloadCountry!
         updateCountry(uid: String!, 
@@ -274,91 +292,92 @@ type_defs = gql("""
         deleteTag(uid: String!): MutationPayload!
         
         createReview(is_text_visible: Boolean, text: String, quality: String!, difficulty: String, uid_author: String!,
-            tags: [String!], creation_date: Datetime): MutationPayloadReview!
+            tags: [String!], creation_date: Datetime, reviewed_node_type: ReviewedNodeType!, 
+            reviewed_node_uid: String!): MutationPayloadReview!
 
-    }
+    }}
 
-    type MutationPayload{
+    type MutationPayload{{
         status: Boolean!
         error: String
-    }
+    }}
 
-    type MutationPayloadCountry{
+    type MutationPayloadCountry{{
         status: Boolean!
         error: String
         country: Country
-    }
+    }}
 
-    type MutationPayloadRegion{
+    type MutationPayloadRegion{{
         status: Boolean!
         error: String
         region: Region
-    }
+    }}
 
-    type MutationPayloadCity{
+    type MutationPayloadCity{{
         status: Boolean!
         error: String
         city: City
-    }
+    }}
 
-    type MutationPayloadUniversity{
+    type MutationPayloadUniversity{{
         status: Boolean!
         error: String
         university: University
-    }
+    }}
 
-    type MutationPayloadFaculty{
+    type MutationPayloadFaculty{{
         status: Boolean!
         error: String
         faculty: Faculty
-    }
+    }}
 
-    type MutationPayloadSpecialization{
+    type MutationPayloadSpecialization{{
         status: Boolean!
         error: String
         specialization: Specialization
-    }
+    }}
 
-    type MutationPayloadScienceDomain{
+    type MutationPayloadScienceDomain{{
         status: Boolean!
         error: String
         science_domain: ScienceDomain
-    }
-    type MutationPayloadCourse{
+    }}
+    type MutationPayloadCourse{{
         status: Boolean!
         error: String
         course: Course
-    }
+    }}
 
-    type MutationPayloadProfessorCourse{
+    type MutationPayloadProfessorCourse{{
         status: Boolean!
         error: String
         professor_course: ProfessorCourse
-    }
+    }}
 
-    type MutationPayloadProfessor{
+    type MutationPayloadProfessor{{
         status: Boolean!
         error: String
         professor: Professor
-    }
+    }}
 
-    type MutationPayloadUser{
+    type MutationPayloadUser{{
         status: Boolean!
         error: String
         user: User
-    }
+    }}
     
-    type MutationPayloadTag{
+    type MutationPayloadTag{{
         status: Boolean!
         error: String
         tag: Tag
-    }
+    }}
     
-    type MutationPayloadReview{
+    type MutationPayloadReview{{
         status: Boolean!
         error: String
         review: Review
-    }
+    }}
 
 
 """)
