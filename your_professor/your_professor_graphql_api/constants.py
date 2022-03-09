@@ -6,6 +6,8 @@ QUALITY = {'1': "The worst", '2': "bad", '3': "ok", '4': "good", '5': "great"}
 DIFFICULTY = {'1': "Very difficult", '2': "difficult", '3': "moderate", '4': "easy", '5': "very easy"}
 # QUALITY = {1: "The worst", 2: "bad", 3: "ok", 4: "good", 5: "great"}
 # DIFFICULTY = {1: "Very difficult", 2: "difficult", 3: "moderate", 4: "easy", 5: "very easy"}
+PASSWORD_FUNCTION = "sha256"
+PASSWORD_ITERATIONS = 100000
 COUNTRIES = {
     "AD": "Andorra",
     "AE": "United Arab Emirates",

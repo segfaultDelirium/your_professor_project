@@ -6,7 +6,7 @@ from .resolver_utils import (get_amount_or_all_of, get_nodes_by_uid_or_none_of, 
 from hashlib import pbkdf2_hmac
 from os import urandom
 from datetime import datetime
-from ..constants import LOGIN_TIMESTAMP_FORMAT
+from ..constants import LOGIN_TIMESTAMP_FORMAT, PASSWORD_FUNCTION, PASSWORD_ITERATIONS
 
 
 @check_database_connection
@@ -39,7 +39,7 @@ def resolve_create_user(_, info, is_active: bool = None, username: str = None, p
     birthday = birthday_checked["birthday"]
     try:
         salt = urandom(32)
-        password_hashed = pbkdf2_hmac('sha256', password.encode('UTF-8'), salt, 100000)
+        password_hashed = pbkdf2_hmac(PASSWORD_FUNCTION, password.encode('UTF-8'), salt, PASSWORD_ITERATIONS)
         user = User(is_active=is_active, username=username, salt=salt.hex(), password=password_hashed,
                     email_address=email_address, is_staff=is_staff, is_super_user=is_super_user,
                     first_name=first_name, last_name=last_name, birthday=birthday, is_male=is_male).save()
@@ -85,7 +85,7 @@ def resolve_update_user(_, info, uid: str, is_active: bool = None, username: str
     try:
         if is_active is not None: user.is_active = is_active
         if password is not None:
-            user.password = pbkdf2_hmac('sha256', password.encode('UTF-8'), bytes.fromhex(user.salt), 100000)
+            user.password = pbkdf2_hmac(PASSWORD_FUNCTION, password.encode('UTF-8'), bytes.fromhex(user.salt), PASSWORD_ITERATIONS)
         if email_address is not None: user.email_address = email_address
         if is_staff is not None: user.is_staff = is_staff
         if is_super_user is not None: user.is_super_user = is_super_user

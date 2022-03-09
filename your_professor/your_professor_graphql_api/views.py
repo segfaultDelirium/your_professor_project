@@ -6,7 +6,6 @@ from .models import (Country, Region, City,
 from hashlib import pbkdf2_hmac
 from os import urandom
 
-
 # Create your views here.
 #
 # from .models import Book
