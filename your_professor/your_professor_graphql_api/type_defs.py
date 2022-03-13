@@ -1,5 +1,7 @@
 from ariadne import gql
-from .constants import REVIEWED_NODE_TYPE, unpack_dict_values_to_schema_enum, unpack_dict_keys_to_schema_enum, QUALITY
+# from constants import (REVIEWED_NODE_TYPE, unpack_dict_values_to_schema_enum, get_union_type_from_dict_values)
+from .constants import (REVIEWED_NODE_TYPE, unpack_dict_values_to_schema_enum, unpack_dict_keys_to_schema_enum,
+                        QUALITY, get_union_type_from_dict_values)
 type_defs = gql(f"""
     type Query{{
         country(local_language_name: String): Country
@@ -172,6 +174,7 @@ type_defs = gql(f"""
         # ProfessorCourse
     }}
 
+    union ReviewedNodeTypeObject = {get_union_type_from_dict_values(REVIEWED_NODE_TYPE)}
     
     type Review{{
         uid: String!
@@ -184,7 +187,7 @@ type_defs = gql(f"""
         creation_date: Datetime!
         most_recent_edit_date: Datetime
         reviewed_node_type: ReviewedNodeType!
-        reviewed_node_uid: String!
+        reviewed_node: ReviewedNodeTypeObject
     }}
 
     type Mutation{{

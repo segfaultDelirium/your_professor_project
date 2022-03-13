@@ -3,6 +3,10 @@ from .constants import DEGREES, COUNTRIES, QUALITY, DIFFICULTY, REVIEWED_NODE_TY
 from enum import Enum
 # Create your models here.
 
+# how to update neo4j based on new models or constraints?
+# neomodel_install_labels  your_professor_graphql_api/models.py --db bolt://neo4j:3BejhhmCyUa4oPLm2XAgmX8GcsGqipFf9EtQvmPuo@localhost:7687/neo4j
+
+
 from django_neomodel import DjangoNode
 from neomodel import (config, StructuredNode, StringProperty, IntegerProperty,
                       UniqueIdProperty, RelationshipTo, RelationshipFrom, BooleanProperty,
@@ -13,12 +17,6 @@ from neomodel import (config, StructuredNode, StringProperty, IntegerProperty,
 # TODO add cardinality to models
 # TODO add relation properties similar to class ReactsTo(StructuredRel)
 
-
-
-# class Book(StructuredNode):
-#     title = StringProperty(unique_index=True)
-#     published = DateProperty()
-#
 
 class Country(DjangoNode):
     uid = UniqueIdProperty()
@@ -47,14 +45,18 @@ class City(StructuredNode):
     universities = RelationshipTo("University", "HOSTS_UNIVERSITY", cardinality=ZeroOrMore)
 
 
-class University(StructuredNode):  # example University of science and technology or Akademia Gorniczo Hutnicza
+class ReviewableNode(StructuredNode):
+    reviews = RelationshipFrom('Review', "REVIEWS", cardinality=ZeroOrMore)
+
+
+class University(ReviewableNode):  # example University of science and technology or Akademia Gorniczo Hutnicza
     uid = UniqueIdProperty()
     local_language_name = StringProperty(max_length=100, required=True)
     name = StringProperty(max_length=100)
     is_active = BooleanProperty(default=True)
     founding_year = IntegerProperty(required=False)
     city = RelationshipFrom(City, "HOSTS_UNIVERSITY", cardinality=One)
-    reviews = RelationshipFrom('Review', "REVIEWS", cardinality=ZeroOrMore)
+    # reviews = RelationshipFrom('Review', "REVIEWS", cardinality=ZeroOrMore)
     faculties = RelationshipTo("Faculty", "HAS_FACULTY", cardinality=ZeroOrMore)
 
 
@@ -67,7 +69,7 @@ class Faculty(StructuredNode):  # example "wydzial fizyki i informatyki stosowan
     specializations = RelationshipTo("Specialization", "HAS_SPECIALIZATION", cardinality=ZeroOrMore)
 
 
-class Specialization(StructuredNode):  # example "informatyka stosowana", "fizyka medyczna"
+class Specialization(ReviewableNode):  # example "informatyka stosowana", "fizyka medyczna"
     uid = UniqueIdProperty()
     name = StringProperty(max_length=100)
     is_active = BooleanProperty(default=True)
@@ -76,7 +78,7 @@ class Specialization(StructuredNode):  # example "informatyka stosowana", "fizyk
     faculty = RelationshipFrom(Faculty, "HAS_SPECIALIZATION", cardinality=One)
     science_domains = RelationshipTo("ScienceDomain", "IS_PART_OF_DOMAIN", cardinality=ZeroOrMore)
     courses = RelationshipTo("Course", "HAS_COURSE", cardinality=ZeroOrMore)
-    reviews = RelationshipFrom('Review', "REVIEWS", cardinality=ZeroOrMore)
+    # reviews = RelationshipFrom('Review', "REVIEWS", cardinality=ZeroOrMore)
     users = RelationshipFrom("User", "STUDIES", cardinality=ZeroOrMore)
 
 
@@ -168,11 +170,12 @@ class Review(StructuredNode):
     most_recent_edit_date = DateTimeProperty()
     reviewed_node_type = StringProperty(choices=REVIEWED_NODE_TYPE, required=True)
     # only one of following relations should be connected
-    university = RelationshipTo(University, "REVIEWS", cardinality=ZeroOrOne)
-    faculty = RelationshipTo(Faculty, "REVIEWS", cardinality=ZeroOrOne)
-    specialization = RelationshipTo(Specialization, "REVIEWS", cardinality=ZeroOrOne)
-    course = RelationshipTo(Course, "REVIEWS", cardinality=ZeroOrOne)
-    professor_course = RelationshipTo(ProfessorCourse, "REVIEWS", cardinality=ZeroOrOne)
+    reviewed_node = RelationshipTo(ReviewableNode, "REVIEWS", cardinality=ZeroOrOne)
+    # university = RelationshipTo(University, "REVIEWS", cardinality=ZeroOrOne)
+    # faculty = RelationshipTo(Faculty, "REVIEWS", cardinality=ZeroOrOne)
+    # specialization = RelationshipTo(Specialization, "REVIEWS", cardinality=ZeroOrOne)
+    # course = RelationshipTo(Course, "REVIEWS", cardinality=ZeroOrOne)
+    # professor_course = RelationshipTo(ProfessorCourse, "REVIEWS", cardinality=ZeroOrOne)
 
 
 

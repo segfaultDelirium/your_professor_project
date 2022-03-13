@@ -1,8 +1,9 @@
-from ..models import Tag, Review, User
+from ..models import (Tag, Review, User, Specialization, University, Faculty, Specialization, Course, ProfessorCourse,
+                      ReviewableNode)
 from ..mutation_payloads import create_mutation_payload_review, create_mutation_payload
 from .resolver_utils import (get_amount_or_all_of, get_nodes_by_uid_or_none_of, check_database_connection)
 from neomodel.exceptions import DeflateError
-from ..constants import DIFFICULTY, QUALITY, REVIEWED_NODE_TYPE
+from ..constants import DIFFICULTY, QUALITY, REVIEWED_NODE_TYPE, get_union_type_from_dict_values
 
 
 def get_key_of_dict(dict, value):
@@ -33,11 +34,14 @@ def dict_contains_value(dict, value):
             return True
     return False
 
-
-# def connect_review_to_node(review: Review, node_type, uid_node):
-#     if not dict_contains_value(REVIEWED_NODE_TYPE, node_type):
-#         raise ValueError(f"incorrect node_type, available node types: {REVIEWED_NODE_TYPE}")
-#     case
+# node_type_long = "Specialization", uid_node = "c6c18f9c85514f32a8722143f2aa9f7c"
+def get_node_to_connect(node_type_long, uid_node):
+    try:
+        # node = eval(f'{node_type_long}.nodes.get(uid="{uid_node}")')
+        node = Specialization.nodes.get(uid=uid_node)
+        return node
+    except Specialization.DoesNotExist:
+        return None
 
 
 def resolve_create_review(_, info, is_text_visible: bool = None, text: str = None, quality: str = None,
@@ -45,22 +49,27 @@ def resolve_create_review(_, info, is_text_visible: bool = None, text: str = Non
                           reviewed_node_uid: str = None):
     try:
         author = User.nodes.get(uid=uid_author)
+        reviewed_node = get_node_to_connect(reviewed_node_type, reviewed_node_uid)
+        if reviewed_node is None:
+            return create_mutation_payload(False, error=f"node to review of type {reviewed_node_type} and uid"
+                                                        " {reviewed_node_uid=} could not be found.")
+        print(reviewed_node_type)
+        reviewed_node_type_letter = get_key_of_dict(REVIEWED_NODE_TYPE, reviewed_node_type)
         review = Review(is_text_visible=is_text_visible, text=text, quality=quality,
                         difficulty=difficulty,
-                        reviewed_node_type=get_key_of_dict(REVIEWED_NODE_TYPE, reviewed_node_type)).save()
+                        reviewed_node_type=reviewed_node_type_letter).save()
         review.author.connect(author)
-        # try:
-        #     connect_review_to_node(review, reviewed_node_type, reviewed_node_uid)
-        # except ValueError as e:
-        #     return create_mutation_payload(False, error=e)
+        review.reviewed_node.connect(reviewed_node)
+
+
         review.save()
         return create_mutation_payload_review(True, review=review)
     except User.DoesNotExist as e:
         print(e)
         return create_mutation_payload(False, error=f"user of {uid_author=} could not be found.")
-    except DeflateError as e:
-        return create_mutation_payload(False, error="invalid choice of quality or difficulty, available choices:"
-                                       f"{QUALITY=}, {DIFFICULTY=}")
+    # except DeflateError as e:
+    #     return create_mutation_payload(False, error="invalid choice of quality or difficulty, available choices:"
+    #                                    f"{QUALITY=}, {DIFFICULTY=}")
     # except Exception as e:
     #     print(e)
     #     return create_mutation_payload(False, error="Sum ting wong")

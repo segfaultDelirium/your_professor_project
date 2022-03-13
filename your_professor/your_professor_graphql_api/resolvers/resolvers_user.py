@@ -34,9 +34,10 @@ def resolve_create_user(_, info, is_active: bool = None, username: str = None, p
         return create_mutation_payload(False, error="user of this username already exists")
     except User.DoesNotExist:
         pass
-    birthday_checked = check_birthday_format(birthday)
-    if not birthday_checked["status"]: return birthday_checked["error"]
-    birthday = birthday_checked["birthday"]
+    if birthday is not None:
+        birthday_checked = check_birthday_format(birthday)
+        if not birthday_checked["status"]: return birthday_checked["error"]
+        birthday = birthday_checked["birthday"]
     try:
         salt = urandom(32)
         password_hashed = pbkdf2_hmac(PASSWORD_FUNCTION, password.encode('UTF-8'), salt, PASSWORD_ITERATIONS)

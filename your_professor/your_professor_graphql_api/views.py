@@ -32,9 +32,9 @@ def add_user():
 
 
 def index(request):
-    print(Country.nodes.all())
-    user = User.nodes.get(last_name="Charliee")
-    print(user.date_joined)
+    # print(Country.nodes.all())
+    # user = User.nodes.get(last_name="Charliee")
+    # print(user.date_joined)
 
     # gawron = Professor(first_name="Przemysław", last_name="Gawroński", is_male=True, degree='3').save()
     # beata = Professor(first_name="Beata", last_name="Orchel", is_male=False, degree='3').save()

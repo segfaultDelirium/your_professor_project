@@ -5,6 +5,7 @@ from datetime import datetime
 from ..mutation_payloads import create_mutation_payload
 from ..constants import BIRTHDAY_FORMAT
 
+
 def get_nodes_by_uid_or_none_of(node_class: StructuredNode, uid: str):
     try:
         return node_class.nodes.get(uid=uid)

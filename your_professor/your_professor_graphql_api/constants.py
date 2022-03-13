@@ -18,6 +18,16 @@ class Quality(Enum):
 REVIEWED_NODE_TYPE = {"U" : "University", "F": 'Faculty', "S": "Specialization", "C": "Course", "P": "ProfessorCourse"}
 
 
+def get_union_type_from_dict_values(dict):
+    values = list(dict.values())
+    res = ""
+    for i in range(len(values) -1):
+        res += f" {values[i]} |"
+    res += f" {values[len(values) -1]}"
+    print(res)
+    return res
+
+
 def unpack_dict_values_to_schema_enum(dict):
     res = ""
     for value in dict.values():
