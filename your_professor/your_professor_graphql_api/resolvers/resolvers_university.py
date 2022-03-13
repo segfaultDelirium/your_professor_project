@@ -6,7 +6,7 @@ from .resolver_utils import get_amount_or_all_of, get_nodes_by_uid_or_none_of
 def resolve_university(obj, info, uid=None):
     if obj is not None:
         return obj.university.all()[0]
-    return get_amount_or_all_of(University, uid)
+    return get_nodes_by_uid_or_none_of(University, uid)
 
 
 def resolve_all_universities(obj, info, amount: int = None):
@@ -14,7 +14,7 @@ def resolve_all_universities(obj, info, amount: int = None):
         if amount is None or amount >= len(obj.universities):
             return obj.universities.all()
         return obj.universities.all()[:amount]
-    return get_nodes_by_uid_or_none_of(University, amount)
+    return get_amount_or_all_of(University, amount)
 
 
 def resolve_create_university(_, info, local_language_name: str,

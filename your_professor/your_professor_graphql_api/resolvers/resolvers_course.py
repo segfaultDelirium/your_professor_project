@@ -33,7 +33,7 @@ def resolve_create_course(_, info, name: str, is_active: bool = None, lecture_ho
         new_course = Course(name=name, is_active=is_active, lecture_hours_amount=lecture_hours_amount,
                             exercises_hours_amount=exercises_hours_amount, has_exam=has_exam, ECTS=ECTS,
                             is_obligatory=is_obligatory, semester=semester).save()
-        new_course.specialization.connect(specialization_to_connect)
+        new_course.specializations.connect(specialization_to_connect)
         new_course.save()
         return create_mutation_payload_course(True, course=new_course)
     except Specialization.DoesNotExist as e:
@@ -88,7 +88,7 @@ def resolve_update_course(_, info, uid, name: str, is_active: bool = None, lectu
 def resolve_delete_course(_, info, uid: str, force: bool = False):
     try:
         course = Course.nodes.get(uid=uid)
-        if not force and len(course.professor_course.all()) != 0:
+        if not force and len(course.professor_courses.all()) != 0:
             return create_mutation_payload(False,
                                            "Course you are trying to delete has Professors attached, "
                                            "please disconnect them before deleting it.")

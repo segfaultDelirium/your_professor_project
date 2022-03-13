@@ -104,6 +104,8 @@ class Course(ReviewableNode):  # example "Python in the enterprise" or "Bazy dan
     users = RelationshipFrom("User", "TAKES_PART_IN", cardinality=ZeroOrMore)
 
 
+
+
 class ProfessorCourse(ReviewableNode):
     uid = UniqueIdProperty()
     is_active = BooleanProperty(default=True)
