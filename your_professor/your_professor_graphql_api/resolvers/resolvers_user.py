@@ -7,7 +7,7 @@ from hashlib import pbkdf2_hmac
 from os import urandom
 from datetime import datetime
 from ..constants import LOGIN_TIMESTAMP_FORMAT, PASSWORD_FUNCTION, PASSWORD_ITERATIONS
-
+from neomodel import db
 
 @check_database_connection
 def resolve_user(obj, info, uid=None):
@@ -29,22 +29,26 @@ def resolve_all_users(obj, info, amount: int = None):
 def resolve_create_user(_, info, is_active: bool = None, username: str = None, password: str = None,
                         email_address: str = None, is_staff: bool = None, is_super_user: bool = None,
                         first_name: str = None, last_name: str = None, birthday: str = None, is_male: bool = None):
+    db.begin()
     try:
         User.nodes.get(username=username)
         return create_mutation_payload(False, error="user of this username already exists")
     except User.DoesNotExist:
         pass
-    birthday_checked = check_birthday_format(birthday)
-    if not birthday_checked["status"]: return birthday_checked["error"]
-    birthday = birthday_checked["birthday"]
+    if birthday is not None:
+        birthday_checked = check_birthday_format(birthday)
+        if not birthday_checked["status"]: return birthday_checked["error"]
+        birthday = birthday_checked["birthday"]
     try:
         salt = urandom(32)
         password_hashed = pbkdf2_hmac(PASSWORD_FUNCTION, password.encode('UTF-8'), salt, PASSWORD_ITERATIONS)
         user = User(is_active=is_active, username=username, salt=salt.hex(), password=password_hashed,
                     email_address=email_address, is_staff=is_staff, is_super_user=is_super_user,
                     first_name=first_name, last_name=last_name, birthday=birthday, is_male=is_male).save()
+        db.commit()
         return create_mutation_payload_user(True, user=user)
     except Exception as e:
+        db.rollback()
         print(e)
         return create_mutation_payload(False, error="Sum ting wong")
 

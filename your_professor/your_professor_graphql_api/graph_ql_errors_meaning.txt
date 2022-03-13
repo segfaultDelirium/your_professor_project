@@ -15,3 +15,6 @@ if by mistake you put a `required=True` as argument to RelationshipFrom,
 "TypeError: 'frozenset' object is not callable"
     reviewed node is probable old and was created before model changed to inherit from ReviewableNode
     the node you want to review must be deleted and created again
+
+"graphql.error.graphql_error.GraphQLError: resolve_connect_review_to_tag() got multiple values for argument 'uid_review'"
+    you probably forgot arguments _, info to your resolver function

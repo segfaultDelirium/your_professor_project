@@ -15,7 +15,7 @@ class Quality(Enum):
     GREAT = 5
 
 
-REVIEWED_NODE_TYPE = {"U" : "University", "F": 'Faculty', "S": "Specialization", "C": "Course", "P": "ProfessorCourse"}
+REVIEWED_NODE_TYPE = {"U" : "University", "F": 'Faculty', "S": "Specialization", "C": "Course", "P": "Professor"}
 
 
 def unpack_dict_values_to_schema_enum(dict):

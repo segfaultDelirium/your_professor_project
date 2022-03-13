@@ -104,22 +104,12 @@ class Course(ReviewableNode):  # example "Python in the enterprise" or "Bazy dan
     ECTS = IntegerProperty()
     is_obligatory = BooleanProperty()
     semester = IntegerProperty()
-    # reviews = RelationshipFrom('Review', "REVIEWS", cardinality=ZeroOrMore)
     specializations = RelationshipFrom(Specialization, "HAS_COURSE", cardinality=OneOrMore)
     professor = RelationshipFrom("Professor", "TEACHES", model=TeachesCourse)
     users = RelationshipFrom("User", "TAKES_PART_IN", cardinality=ZeroOrMore)
 
 
-# class ProfessorCourse(ReviewableNode):
-#     uid = UniqueIdProperty()
-#     is_active = BooleanProperty(default=True)
-#     course = RelationshipFrom(Course, "IS_TAUGHT_BY", cardinality=ZeroOrOne)
-#     professor = RelationshipFrom("Professor", "TEACHES", cardinality=ZeroOrOne)
-#     is_professor_lecturer = BooleanProperty(required=True)
-#     # reviews = RelationshipFrom('Review', "REVIEWS")
-
-
-class Professor(StructuredNode):
+class Professor(ReviewableNode):
     uid = UniqueIdProperty()
     first_name = StringProperty(max_length=100)
     last_name = StringProperty(max_length=100)

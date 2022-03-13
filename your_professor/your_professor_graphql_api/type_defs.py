@@ -176,7 +176,7 @@ type TeachesDetails{{
         # Faculty
         # Specialization
         # Course
-        # ProfessorCourse
+        # Professor
     }}
 
     
@@ -303,6 +303,8 @@ type TeachesDetails{{
             reviewed_node_uid: String!): MutationPayloadReview!
         updateReview(uid: String!, is_text_visible: Boolean, text: String, quality: String, difficulty: String,
             tags: [String!]): MutationPayloadReview!
+        connectReviewToTags(uid: String!, uid_tags: [String!]!): MutationPayloadReview!
+        disconnectReviewFromTags(uid: String!, uid_tags: [String!]!): MutationPayloadReview!
         deleteReview(uid: String!): MutationPayload!
     }}
 
@@ -357,12 +359,6 @@ type TeachesDetails{{
         error: String
         course: Course
     }}
-
-    # type MutationPayloadProfessorCourse{{
-    #     status: Boolean!
-    #     error: String
-    #     professor_course: ProfessorCourse
-    # }}
 
     type MutationPayloadProfessor{{
         status: Boolean!

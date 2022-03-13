@@ -127,4 +127,7 @@ course.set_field("reviews", resolve_all_reviews)
 professor_course.set_field("reviews", resolve_all_reviews)
 mutation.set_field("createReview", resolve_create_review)
 mutation.set_field("updateReview", resolve_update_review)
+mutation.set_field("connectReviewToTags", resolve_connect_review_to_tags)
+mutation.set_field("disconnectReviewFromTags", resolve_disconnect_review_from_tags)
 mutation.set_field("deleteReview", resolve_delete_review)
+
