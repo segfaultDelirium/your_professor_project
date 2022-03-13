@@ -11,3 +11,7 @@ graphql errors explanation:
 if by mistake you put a `required=True` as argument to RelationshipFrom,
     it will throw exception `neomodel.exceptions.NodeClassAlreadyDefined: <exception str() failed>`
     instead use cardinality
+
+"TypeError: 'frozenset' object is not callable"
+    reviewed node is probable old and was created before model changed to inherit from ReviewableNode
+    the node you want to review must be deleted and created again

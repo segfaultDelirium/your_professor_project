@@ -294,7 +294,9 @@ type_defs = gql(f"""
         createReview(is_text_visible: Boolean, text: String, quality: String!, difficulty: String, uid_author: String!,
             tags: [String!], creation_date: Datetime, reviewed_node_type: ReviewedNodeType!, 
             reviewed_node_uid: String!): MutationPayloadReview!
-
+        updateReview(uid: String!, is_text_visible: Boolean, text: String, quality: String, difficulty: String,
+            tags: [String!]): MutationPayloadReview!
+        deleteReview(uid: String!): MutationPayload!
     }}
 
     type MutationPayload{{
