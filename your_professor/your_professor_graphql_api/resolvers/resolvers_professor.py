@@ -4,6 +4,7 @@ from ..mutation_payloads import create_mutation_payload, \
 from .resolver_utils import get_amount_or_all_of, get_nodes_by_uid_or_none_of
 from neomodel import db
 
+
 def resolve_professor(obj, info, uid=None):
     if obj is not None:
         print(obj.professor.all()[0])
@@ -19,13 +20,21 @@ def resolve_all_professors(obj, info, amount: int = None):
     return get_amount_or_all_of(Professor, amount)
 
 
-def resolve_professor_teaches(obj, info):
-    results, meta = db.cypher_query(f'match(n:Professor)-[r]->(c:Course) where n.uid="{obj.uid}" return r')
+# node_type_of_uid is argument that is binded in schema_field_settings.py file
+def resolve_professor_teaches(obj, info, node_type_of_uid = None):
+    results, meta = None, None
+    if node_type_of_uid == "Professor":
+        results, meta = db.cypher_query(f'match(p:Professor)-[r]->(c:Course) where p.uid="{obj.uid}" return r')
+    elif node_type_of_uid == "Course":
+        results, meta = db.cypher_query(f'match(p:Professor)-[r]->(c:Course) where c.uid="{obj.uid}" return r')
+    else:
+        raise NotImplementedError(f'node_type_of_uid is {node_type_of_uid} '
+                                  f'when it should be either "Professor" or "Course"')
     rels = [TeachesCourse.inflate(row[0]) for row in results]
     res = []
     for rel in rels:
         res.append({'is_active': rel.is_active, 'is_professor_lecturer': rel.is_professor_lecturer,
-                    'course': rel.end_node()})
+                    'course': rel.end_node(), 'professor': rel.start_node()})
     return res
 
 

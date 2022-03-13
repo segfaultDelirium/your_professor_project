@@ -18,6 +18,10 @@ def resolve_all_courses(obj, info, amount: int = None):
     return get_amount_or_all_of(Course, amount)
 
 
+# def resolve_is_taught_by(obj, info):
+
+
+
 def resolve_create_course(_, info, name: str, is_active: bool = None, lecture_hours_amount: int = None,
                           exercises_hours_amount: int = None, has_exam: bool = None, ECTS: int = None,
                           is_obligatory: bool = None, semester: int = None, uid_specialization: str = None):

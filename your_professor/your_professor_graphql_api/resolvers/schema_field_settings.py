@@ -1,6 +1,7 @@
 from ariadne import (MutationType, QueryType, ObjectType)
 
 from . import *  # imports all imports from __init__.py
+from functools import partial
 
 query = QueryType()
 mutation = MutationType()
@@ -94,7 +95,8 @@ mutation.set_field("updateProfessor", resolve_update_professor)
 # mutation.set_field("reconnectProfessorToProfessorCourse", resolve_reconnect_professor_to_professor_course)
 # mutation.set_field("disconnectProfessorFromProfessorCourse", resolve_disconnect_professor_from_professor_course)
 mutation.set_field("deleteProfessor", resolve_delete_professor)
-professor.set_field("teaches", resolve_professor_teaches)
+professor.set_field("teaches", partial(resolve_professor_teaches, node_type_of_uid="Professor"))
+course.set_field("is_taught_by", partial(resolve_professor_teaches, node_type_of_uid="Course"))
 
 query.set_field("user", resolve_user)
 review.set_field("author", resolve_user)

@@ -96,6 +96,20 @@ type_defs = gql(f"""
         specializations: [Specialization!]
     }}
 
+type TeachesDetails{{
+        is_active: Boolean
+        is_professor_lecturer: Boolean!
+        course: Course
+        professor: Professor
+}}
+
+ input ProfessorTeachesDetails{{
+        uid_course: String!
+        is_active: Boolean
+        is_professor_lecturer: Boolean!
+}}
+
+
     type Course{{
         uid: String!
         name: String!
@@ -107,23 +121,12 @@ type_defs = gql(f"""
         is_obligatory: Boolean!
         semester: Int!
         specializations: [Specialization!]!
-        # professor_courses: [ProfessorCourse!]
         users: [User!]
         reviews: [Review!]
+        is_taught_by: [TeachesDetails!]
     }}
  
- input ProfessorTeachesDetails{{
-        uid_course: String!
-        is_active: Boolean
-        is_professor_lecturer: Boolean!
-}}
 
-type TeachesDetails{{
-        is_active: Boolean
-        is_professor_lecturer: Boolean!
-        course: Course
-}}
-       
     type Professor{{
         uid: String
         is_active: Boolean!
