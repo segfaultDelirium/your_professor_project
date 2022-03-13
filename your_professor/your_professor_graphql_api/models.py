@@ -88,6 +88,12 @@ class ScienceDomain(StructuredNode):  # example biology, computer science
     specializations = RelationshipFrom(Specialization, "IS_PART_OF_DOMAIN", cardinality=ZeroOrMore)
 
 
+class TeachesCourse(StructuredRel):
+    # uid = UniqueIdProperty()
+    is_active = BooleanProperty(default=True)
+    is_professor_lecturer = BooleanProperty(default=False)
+
+
 class Course(ReviewableNode):  # example "Python in the enterprise" or "Bazy danych 1"
     uid = UniqueIdProperty()
     name = StringProperty(max_length=100)
@@ -100,19 +106,17 @@ class Course(ReviewableNode):  # example "Python in the enterprise" or "Bazy dan
     semester = IntegerProperty()
     # reviews = RelationshipFrom('Review', "REVIEWS", cardinality=ZeroOrMore)
     specializations = RelationshipFrom(Specialization, "HAS_COURSE", cardinality=OneOrMore)
-    professor_courses = RelationshipTo("ProfessorCourse", "IS_TAUGHT_BY")
+    professor = RelationshipFrom("Professor", "TEACHES", model=TeachesCourse)
     users = RelationshipFrom("User", "TAKES_PART_IN", cardinality=ZeroOrMore)
 
 
-
-
-class ProfessorCourse(ReviewableNode):
-    uid = UniqueIdProperty()
-    is_active = BooleanProperty(default=True)
-    course = RelationshipFrom(Course, "IS_TAUGHT_BY", cardinality=ZeroOrOne)
-    professor = RelationshipFrom("Professor", "TEACHES", cardinality=ZeroOrOne)
-    is_professor_lecturer = BooleanProperty(required=True)
-    # reviews = RelationshipFrom('Review', "REVIEWS")
+# class ProfessorCourse(ReviewableNode):
+#     uid = UniqueIdProperty()
+#     is_active = BooleanProperty(default=True)
+#     course = RelationshipFrom(Course, "IS_TAUGHT_BY", cardinality=ZeroOrOne)
+#     professor = RelationshipFrom("Professor", "TEACHES", cardinality=ZeroOrOne)
+#     is_professor_lecturer = BooleanProperty(required=True)
+#     # reviews = RelationshipFrom('Review', "REVIEWS")
 
 
 class Professor(StructuredNode):
@@ -123,7 +127,7 @@ class Professor(StructuredNode):
     birth_year = IntegerProperty()
     is_male = BooleanProperty(required=True)
     degree = StringProperty(required=True, choices=DEGREES)
-    professor_courses = RelationshipTo(ProfessorCourse, "TEACHES")
+    courses = RelationshipTo(Course, "TEACHES", model=TeachesCourse)
 
 
 class ReactsTo(StructuredRel):

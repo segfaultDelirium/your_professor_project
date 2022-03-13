@@ -18,8 +18,8 @@ type_defs = gql(f"""
         allScienceDomains(amount: Int): [ScienceDomain!]
         course(uid: String!): Course
         allCourses(amount: Int): [Course!]
-        professorCourse(uid: String!): ProfessorCourse
-        allProfessorCourses(amount: Int): [ProfessorCourse!]
+        # professorCourse(uid: String!): ProfessorCourse
+        # allProfessorCourses(amount: Int): [ProfessorCourse!]
         professor(uid: String!): Professor
         allProfessors(amount: Int): [Professor!]
         user(uid: String!): User
@@ -107,20 +107,23 @@ type_defs = gql(f"""
         is_obligatory: Boolean!
         semester: Int!
         specializations: [Specialization!]!
-        professor_courses: [ProfessorCourse!]
+        # professor_courses: [ProfessorCourse!]
         users: [User!]
         reviews: [Review!]
     }}
-
-    type ProfessorCourse{{
-        uid: String!
-        is_active: Boolean!
-        course: Course!
-        professor: Professor!
+ 
+ input ProfessorTeachesDetails{{
+        uid_course: String!
+        is_active: Boolean
         is_professor_lecturer: Boolean!
-        reviews: [Review!]
-    }}
+}}
 
+type TeachesDetails{{
+        is_active: Boolean
+        is_professor_lecturer: Boolean!
+        course: Course
+}}
+       
     type Professor{{
         uid: String
         is_active: Boolean!
@@ -129,9 +132,10 @@ type_defs = gql(f"""
         birth_year: Int
         is_male: Boolean!
         degree: String!
-        professor_courses: [ProfessorCourse!]
+        teaches: [TeachesDetails!]
     }}
 
+ 
 
     scalar Datetime
 
@@ -258,21 +262,21 @@ type_defs = gql(f"""
             uid_specialization: String = None): MutationPayloadCourse!
         deleteCourse(uid: String!, force: Boolean = False): MutationPayload!
 
-        createProfessorCourse(is_active: Boolean = None, uid_course: String!, uid_professor: String = None,
-            is_professor_lecturer: Boolean!): MutationPayloadProfessorCourse! 
-        updateProfessorCourse(uid: String!, is_active: Boolean = None, uid_course: String = None, 
-            uid_professor: String = None, is_professor_lecturer: Boolean = None): MutationPayloadProfessorCourse!
-        deleteProfessorCourse(uid: String!, force: Boolean = False): MutationPayload!
+        # createProfessorCourse(is_active: Boolean = None, uid_course: String!, uid_professor: String = None,
+        #     is_professor_lecturer: Boolean!): MutationPayloadProfessorCourse! 
+        # updateProfessorCourse(uid: String!, is_active: Boolean = None, uid_course: String = None, 
+        #     uid_professor: String = None, is_professor_lecturer: Boolean = None): MutationPayloadProfessorCourse!
+        # deleteProfessorCourse(uid: String!, force: Boolean = False): MutationPayload!
 
         createProfessor(first_name: String!, last_name: String!, is_active: Boolean = None, birth_year: Int = None, 
-            is_male: Boolean!, degree: String!, uid_professor_course: String = None): MutationPayloadProfessor!
+            is_male: Boolean!, degree: String!, professor_teaches_details_list: [ProfessorTeachesDetails!] = None): MutationPayloadProfessor!
         updateProfessor(uid: String!, is_active: Boolean = None, first_name: String = None, last_name: String = None, 
             birth_year: Int = None, is_male: Boolean = None, degree: String!, 
             uid_professor_course: String = None): MutationPayloadProfessor!
-        connectProfessorToProfessorCourse(uid: String!, uid_professor_course: String!): MutationPayloadProfessor!
-        reconnectProfessorToProfessorCourse(uid: String!, uid_old_professor_course: String!, 
-            uid_new_professor_course: String!): MutationPayloadProfessor!
-        disconnectProfessorFromProfessorCourse(uid: String!, uid_professor_course: String!): MutationPayloadProfessor!
+        # connectProfessorToProfessorCourse(uid: String!, uid_professor_course: String!): MutationPayloadProfessor!
+        # reconnectProfessorToProfessorCourse(uid: String!, uid_old_professor_course: String!, 
+        #     uid_new_professor_course: String!): MutationPayloadProfessor!
+        # disconnectProfessorFromProfessorCourse(uid: String!, uid_professor_course: String!): MutationPayloadProfessor!
         deleteProfessor(uid: String!): MutationPayload!
 
         createUser(is_active: Boolean, username: String!, password: String!, email_address: String, is_staff: Boolean, 
@@ -351,11 +355,11 @@ type_defs = gql(f"""
         course: Course
     }}
 
-    type MutationPayloadProfessorCourse{{
-        status: Boolean!
-        error: String
-        professor_course: ProfessorCourse
-    }}
+    # type MutationPayloadProfessorCourse{{
+    #     status: Boolean!
+    #     error: String
+    #     professor_course: ProfessorCourse
+    # }}
 
     type MutationPayloadProfessor{{
         status: Boolean!

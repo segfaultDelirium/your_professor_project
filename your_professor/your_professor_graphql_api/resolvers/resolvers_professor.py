@@ -1,11 +1,12 @@
-from ..models import ProfessorCourse, Professor
+from ..models import Professor, Course, TeachesCourse
 from ..mutation_payloads import create_mutation_payload, \
     create_mutation_payload_professor
 from .resolver_utils import get_amount_or_all_of, get_nodes_by_uid_or_none_of
-
+from neomodel import db
 
 def resolve_professor(obj, info, uid=None):
     if obj is not None:
+        print(obj.professor.all()[0])
         return obj.professor.all()[0]
     return get_nodes_by_uid_or_none_of(Professor, uid)
 
@@ -18,22 +19,38 @@ def resolve_all_professors(obj, info, amount: int = None):
     return get_amount_or_all_of(Professor, amount)
 
 
+def resolve_professor_teaches(obj, info):
+    results, meta = db.cypher_query(f'match(n:Professor)-[r]->(c:Course) where n.uid="{obj.uid}" return r')
+    rels = [TeachesCourse.inflate(row[0]) for row in results]
+    res = []
+    for rel in rels:
+        res.append({'is_active': rel.is_active, 'is_professor_lecturer': rel.is_professor_lecturer,
+                    'course': rel.end_node()})
+    return res
+
+
 def resolve_create_professor(_, info, first_name: str, last_name: str, is_active: bool = None, birth_year: int = None,
-                             is_male: bool = None, degree: str = None, uid_professor_course: str = None):
+                             is_male: bool = None, degree: str = None, professor_teaches_details_list: [] = None):
+    db.begin()
     try:
-        professor_course_to_connect = None
-        if uid_professor_course is not None:
-            professor_course_to_connect = ProfessorCourse.nodes.get(uid=uid_professor_course)
         new_professor = Professor(first_name=first_name, last_name=last_name, is_active=is_active,
                                   birth_year=birth_year, is_male=is_male, degree=degree).save()
-        if professor_course_to_connect is not None:
-            new_professor.professor_course.connect(professor_course_to_connect)
+        if professor_teaches_details_list is not None and len(professor_teaches_details_list) != 0 :
+            for professor_teaches_details in professor_teaches_details_list:
+                try:
+                    course = Course.nodes.get(uid=professor_teaches_details["uid_course"])
+                    rel = new_professor.courses.connect(course)
+                    rel.is_active = professor_teaches_details["is_active"]
+                    rel.is_professor_lecturer = professor_teaches_details["is_professor_lecturer"]
+                except Course.DoesNotExist as e:
+                    db.rollback()
+                    return create_mutation_payload(False,
+                                                   error=f'Course of uid: '
+                                                         f'{professor_teaches_details["uid_course"]}'
+                                                         f'could not be found.')
         new_professor.save()
+        db.commit()
         return create_mutation_payload_professor(True, professor=new_professor)
-    except ProfessorCourse.DoesNotExist as e:
-        print(e)
-        return create_mutation_payload(False,
-                                       error=f"ProfessorCourse of uid {uid_professor_course} could not be found.")
     except Exception as e:
         print(e)
         return create_mutation_payload(False, error="Sum ting wong")
