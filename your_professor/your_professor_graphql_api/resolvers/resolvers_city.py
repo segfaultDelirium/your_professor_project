@@ -3,10 +3,11 @@ from ..mutation_payloads import create_mutation_payload_city, create_mutation_pa
 from neomodel import db
 from .resolver_utils import get_amount_or_all_of, get_nodes_by_uid_or_none_of
 
+
 def resolve_city(obj, info, uid=None):
     if obj is not None:
         return obj.city.all()[0]
-    return get_amount_or_all_of(City, uid)
+    return get_nodes_by_uid_or_none_of(City, uid)
 
 
 def resolve_all_cities(obj, info, amount: int = None):
@@ -14,7 +15,7 @@ def resolve_all_cities(obj, info, amount: int = None):
         if amount is None or amount >= len(obj.cities):
             return obj.cities.all()
         return obj.cities.all()[:amount]
-    return get_nodes_by_uid_or_none_of(City, amount)
+    return get_amount_or_all_of(City, amount)
 
 
 def resolve_create_city(_, info, local_language_name: str, name: str, uid_region: str):

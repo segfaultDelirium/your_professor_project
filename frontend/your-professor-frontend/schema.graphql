@@ -1,0 +1,316 @@
+# This file was generated based on ".graphqlconfig". Do not edit manually.
+
+schema {
+    query: Query
+    mutation: Mutation
+}
+
+type City {
+    is_active: Boolean!
+    local_language_name: String!
+    name: String!
+    region: Region!
+    uid: String!
+    universities: [University!]!
+}
+
+type Country {
+    ISO_code_name: String!
+    is_active: Boolean!
+    local_language_name: String!
+    regions(amount: Int): [Region!]
+    uid: String!
+}
+
+type Course {
+    ECTS: Int!
+    exercises_hours_amount: Int!
+    has_exam: Boolean!
+    is_active: Boolean!
+    is_obligatory: Boolean!
+    is_taught_by: [TeachesDetails!]
+    lecture_hours_amount: Int!
+    name: String!
+    reviews: [Review!]
+    semester: Int!
+    specializations: [Specialization!]!
+    uid: String!
+    users: [User!]
+}
+
+type Date {
+    day: Int!
+    month: Int!
+    year: Int!
+}
+
+type Faculty {
+    is_active: Boolean!
+    name: String!
+    reviews: [Review!]
+    specializations: [Specialization!]!
+    uid: String!
+    university: University!
+}
+
+type Mutation {
+    connectReviewToTags(uid: String!, uid_tags: [String!]!): MutationPayloadReview!
+    connectScienceDomainToSpecialization(uid: String!, uid_specialization: String!): MutationPayloadScienceDomain!
+    connectUserToCourse(uid: String!, uid_course: String!): MutationPayloadUser!
+    connectUserToSpecialization(uid: String!, uid_specialization: String!): MutationPayloadUser!
+    createCity(is_active: Boolean, local_language_name: String!, name: String = "", uid_region: String!): MutationPayloadCity!
+    createCountryByISO(ISO_code_name: String!, local_language_name: String!): MutationPayloadCountry!
+    createCourse(ECTS: Int!, exercises_hours_amount: Int!, has_exam: Boolean!, is_active: Boolean, is_obligatory: Boolean!, lecture_hours_amount: Int!, name: String!, semester: Int!, uid_specialization: String!): MutationPayloadCourse!
+    createFaculty(is_active: Boolean, name: String!, uid_university: String!): MutationPayloadFaculty!
+    createProfessor(birth_year: Int, degree: String!, first_name: String!, is_active: Boolean, is_male: Boolean!, last_name: String!, professor_teaches_details_list: [ProfessorTeachesDetails!]): MutationPayloadProfessor!
+    createRegion(local_language_name: String!, name: String = "", uid_country: String!): MutationPayloadRegion!
+    createReview(creation_date: Datetime, difficulty: String, is_text_visible: Boolean, quality: String!, reviewed_node_type: ReviewedNodeType!, reviewed_node_uid: String!, tags: [String!], text: String, uid_author: String!): MutationPayloadReview!
+    createScienceDomain(is_active: Boolean, name: String!, name_in_polish: String): MutationPayloadScienceDomain!
+    createSpecialization(is_active: Boolean, is_full_time: Boolean!, name: String!, specialization_degree: Int!, uid_faculty: String!): MutationPayloadSpecialization!
+    createTag(tag: String!): MutationPayloadTag!
+    createUniversity(founding_year: Int, is_active: Boolean, local_language_name: String!, name: String, uid_city: String!): MutationPayloadUniversity!
+    createUser(birthday: Datetime, email_address: String, first_name: String, is_active: Boolean, is_male: Boolean, is_staff: Boolean, is_super_user: Boolean, last_name: String, password: String!, username: String!): MutationPayloadUser!
+    deleteCity(force: Boolean, uid: String!): MutationPayload!
+    deleteCountry(force: Boolean, uid: String!): MutationPayload!
+    deleteCourse(force: Boolean, uid: String!): MutationPayload!
+    deleteFaculty(force: Boolean, uid: String!): MutationPayload!
+    deleteProfessor(uid: String!): MutationPayload!
+    deleteRegion(force: Boolean, uid: String!): MutationPayload!
+    deleteReview(uid: String!): MutationPayload!
+    deleteScienceDomain(force: Boolean, uid: String!): MutationPayload!
+    deleteSpecialization(force: Boolean, uid: String!): MutationPayload!
+    deleteTag(uid: String!): MutationPayload!
+    deleteUniversity(force: Boolean, uid: String!): MutationPayload!
+    deleteUser(uid: String!): MutationPayload!
+    disconnectReviewFromTags(uid: String!, uid_tags: [String!]!): MutationPayloadReview!
+    disconnectScienceDomainFromSpecialization(uid: String!, uid_specialization: String!): MutationPayloadScienceDomain!
+    disconnectUserFromCourse(uid: String!, uid_course: String!): MutationPayloadUser!
+    disconnectUserFromSpecialization(uid: String!, uid_specialization: String!): MutationPayloadUser!
+    updateCity(is_active: Boolean, local_language_name: String = "", name: String = "", uid: String!, uid_region: String): MutationPayloadCity!
+    updateCountry(ISO_code_name: String = "", is_active: Boolean, local_language_name: String = "", uid: String!): MutationPayloadCountry!
+    updateCourse(ECTS: Int, exercises_hours_amount: Int, has_exam: Boolean, is_active: Boolean, is_obligatory: Boolean, lecture_hours_amount: Int, name: String, semester: Int, uid: String!, uid_specialization: String): MutationPayloadCourse!
+    updateFaculty(is_active: Boolean, name: String, uid: String!, uid_university: String): MutationPayloadFaculty!
+    updateProfessor(birth_year: Int, degree: String!, first_name: String, is_active: Boolean, is_male: Boolean, last_name: String, uid: String!, uid_professor_course: String): MutationPayloadProfessor!
+    updateRegion(is_active: Boolean, local_language_name: String = "", name: String = "", uid: String!, uid_country: String = ""): Boolean!
+    updateReview(difficulty: String, is_text_visible: Boolean, quality: String, tags: [String!], text: String, uid: String!): MutationPayloadReview!
+    updateScienceDomain(is_active: Boolean, name: String, name_in_polish: String, uid: String!): MutationPayloadScienceDomain!
+    updateSpecialization(is_active: Boolean, is_full_time: Boolean, name: String, specialization_degree: Int, uid: String!, uid_faculty: String): MutationPayloadSpecialization!
+    updateTag(tag: String!, uid: String!): MutationPayloadTag!
+    updateUniversity(founding_year: Int, is_active: Boolean, local_language_name: String, name: String, uid: String!, uid_city: String): MutationPayloadUniversity!
+    updateUser(birthday: Datetime, email_address: String, first_name: String, is_active: Boolean, is_male: Boolean, is_staff: Boolean, is_super_user: Boolean, last_name: String, password: String, uid: String!, username: String): MutationPayloadUser!
+}
+
+type MutationPayload {
+    error: String
+    status: Boolean!
+}
+
+type MutationPayloadCity {
+    city: City
+    error: String
+    status: Boolean!
+}
+
+type MutationPayloadCountry {
+    country: Country
+    error: String
+    status: Boolean!
+}
+
+type MutationPayloadCourse {
+    course: Course
+    error: String
+    status: Boolean!
+}
+
+type MutationPayloadFaculty {
+    error: String
+    faculty: Faculty
+    status: Boolean!
+}
+
+type MutationPayloadProfessor {
+    error: String
+    professor: Professor
+    status: Boolean!
+}
+
+type MutationPayloadRegion {
+    error: String
+    region: Region
+    status: Boolean!
+}
+
+type MutationPayloadReview {
+    error: String
+    review: Review
+    status: Boolean!
+}
+
+type MutationPayloadScienceDomain {
+    error: String
+    science_domain: ScienceDomain
+    status: Boolean!
+}
+
+type MutationPayloadSpecialization {
+    error: String
+    specialization: Specialization
+    status: Boolean!
+}
+
+type MutationPayloadTag {
+    error: String
+    status: Boolean!
+    tag: Tag
+}
+
+type MutationPayloadUniversity {
+    error: String
+    status: Boolean!
+    university: University
+}
+
+type MutationPayloadUser {
+    error: String
+    status: Boolean!
+    user: User
+}
+
+type Professor {
+    birth_year: Int
+    degree: String!
+    first_name: String!
+    is_active: Boolean!
+    is_male: Boolean!
+    last_name: String!
+    teaches: [TeachesDetails!]
+    uid: String
+}
+
+type Query {
+    allCities(amount: Int): [City!]
+    allCountries(amount: Int): [Country!]!
+    allCourses(amount: Int): [Course!]
+    allFaculties(amount: Int): [Faculty!]
+    allProfessors(amount: Int): [Professor!]
+    allRegions(amount: Int): [Region!]
+    allReviews(amount: Int): [Review!]
+    allScienceDomains(amount: Int): [ScienceDomain!]
+    allSpecializations(amount: Int): [Specialization!]
+    allTags(amount: Int): [Tag!]
+    allUniversities(amount: Int): [University!]
+    allUsers(amount: Int): [User!]
+    city(uid: String!): City
+    country(local_language_name: String): Country
+    course(uid: String!): Course
+    faculty(uid: String!): Faculty
+    professor(uid: String!): Professor
+    region(uid: String): Region
+    review(uid: String!): Review
+    scienceDomain(uid: String!): ScienceDomain
+    specialization(uid: String!): Specialization
+    tag(uid: String!): Tag
+    university(uid: String!): University
+    user(uid: String!): User
+}
+
+type Region {
+    cities: [City!]!
+    country: Country!
+    is_active: Boolean!
+    local_language_name: String!
+    name: String!
+    uid: String!
+}
+
+type Review {
+    author: User!
+    creation_date: Datetime!
+    difficulty: String
+    is_text_visible: Boolean!
+    most_recent_edit_date: Datetime
+    quality: String!
+    reviewed_node_type: ReviewedNodeType!
+    reviewed_node_uid: String!
+    tags: [Tag!]
+    text: String
+    uid: String!
+}
+
+type ScienceDomain {
+    is_active: Boolean!
+    name: String!
+    name_in_polish: String
+    specializations: [Specialization!]
+    uid: String!
+}
+
+type Specialization {
+    courses: [Course!]!
+    faculty: Faculty!
+    is_active: Boolean!
+    is_full_time: Boolean!
+    name: String!
+    reviews: [Review!]
+    science_domains: [ScienceDomain!]!
+    specialization_degree: Int!
+    uid: String!
+    users: [User!]
+}
+
+type Tag {
+    reviews: [Review!]
+    tag: String!
+    uid: String!
+}
+
+type TeachesDetails {
+    course: Course
+    is_active: Boolean
+    is_professor_lecturer: Boolean!
+    professor: Professor
+}
+
+type University {
+    city: City!
+    faculties: [Faculty!]
+    founding_year: Int
+    is_active: Boolean!
+    local_language_name: String!
+    name: String!
+    reviews: [Review!]
+    uid: String!
+}
+
+type User {
+    birthday: Date
+    courses: [Course!]
+    date_joined: Datetime!
+    email_address: String
+    first_name: String
+    is_active: Boolean!
+    is_male: Boolean
+    is_staff: Boolean!
+    is_super_user: Boolean!
+    last_name: String
+    specializations: [Specialization!]
+    uid: String!
+    username: String!
+}
+
+enum ReviewedNodeType {
+    Course
+    Faculty
+    Professor
+    Specialization
+    University
+}
+
+scalar Datetime
+
+input ProfessorTeachesDetails {
+    is_active: Boolean
+    is_professor_lecturer: Boolean!
+    uid_course: String!
+}
