@@ -205,7 +205,8 @@ type TeachesDetails{{
 
         createRegion(local_language_name: String!,
             name: String = "",
-            uid_country: String!): MutationPayloadRegion!
+            uid_country: String!,
+            is_active: Boolean): MutationPayloadRegion!
         updateRegion(uid: String!, 
             local_language_name: String = "",
             name: String = "", 

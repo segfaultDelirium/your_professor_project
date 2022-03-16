@@ -1,5 +1,5 @@
 schema: http://localhost:7777/graphql
-documents: "./src/**/*.graphqlrc.yml"
+documents: "./src/**/*.graphql"
 generates:
   src/generated-types.ts:
     plugins:

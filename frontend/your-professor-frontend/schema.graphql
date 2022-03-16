@@ -63,7 +63,7 @@ type Mutation {
     createCourse(ECTS: Int!, exercises_hours_amount: Int!, has_exam: Boolean!, is_active: Boolean, is_obligatory: Boolean!, lecture_hours_amount: Int!, name: String!, semester: Int!, uid_specialization: String!): MutationPayloadCourse!
     createFaculty(is_active: Boolean, name: String!, uid_university: String!): MutationPayloadFaculty!
     createProfessor(birth_year: Int, degree: String!, first_name: String!, is_active: Boolean, is_male: Boolean!, last_name: String!, professor_teaches_details_list: [ProfessorTeachesDetails!]): MutationPayloadProfessor!
-    createRegion(local_language_name: String!, name: String = "", uid_country: String!): MutationPayloadRegion!
+    createRegion(is_active: Boolean, local_language_name: String!, name: String = "", uid_country: String!): MutationPayloadRegion!
     createReview(creation_date: Datetime, difficulty: String, is_text_visible: Boolean, quality: String!, reviewed_node_type: ReviewedNodeType!, reviewed_node_uid: String!, tags: [String!], text: String, uid_author: String!): MutationPayloadReview!
     createScienceDomain(is_active: Boolean, name: String!, name_in_polish: String): MutationPayloadScienceDomain!
     createSpecialization(is_active: Boolean, is_full_time: Boolean!, name: String!, specialization_degree: Int!, uid_faculty: String!): MutationPayloadSpecialization!

@@ -17,7 +17,7 @@ def resolve_all_regions(obj, info, amount: int = None):
     return get_amount_or_all_of(Region, amount)
 
 
-def resolve_create_region(_, info, local_language_name: str, name: str, uid_country: str):
+def resolve_create_region(_, info, local_language_name: str = None, name: str = None, uid_country: str = None, is_active: bool = None):
     try:
         probing_region = Region.nodes.get(local_language_name=local_language_name)
         return create_mutation_payload_region(False,
@@ -27,7 +27,7 @@ def resolve_create_region(_, info, local_language_name: str, name: str, uid_coun
         pass
     try:
         country_to_connect = Country.nodes.get(uid=uid_country)
-        new_region = Region(local_language_name=local_language_name, name=name).save()
+        new_region = Region(local_language_name=local_language_name, name=name, is_active=is_active).save()
         new_region.country.connect(country_to_connect)
         new_region.save()
         return create_mutation_payload_region(True, region=new_region)
