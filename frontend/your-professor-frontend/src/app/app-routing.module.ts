@@ -9,7 +9,11 @@ const routes: Routes = [
   },
   {
     path: 'signup', component: SignUpComponent
-  }
+  },
+  { path: 'home', loadChildren: () => import('./modules/home/home.module').then(m => m.HomeModule) },
+  { path: '', redirectTo: 'home', pathMatch: 'full'},
+  { path: 'countries', loadChildren: () => import('./modules/countries/countries.module').then(m => m.CountriesModule) }
+
 ];
 
 @NgModule({
