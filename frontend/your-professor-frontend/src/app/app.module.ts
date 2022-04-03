@@ -5,7 +5,7 @@ import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {SignUpModule} from "./auth/sign-up/sign-up.module";
 import {LoginModule} from "./auth/login/login.module";
-import {APOLLO_OPTIONS} from "apollo-angular";
+import {ApolloModule, APOLLO_OPTIONS} from "apollo-angular";
 import { HttpLink } from 'apollo-angular/http';
 import {InMemoryCache} from "@apollo/client/core";
 import {HttpClientModule} from "@angular/common/http";
@@ -30,15 +30,16 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
     MaterialModule,
     FormsModule,
     ReactiveFormsModule,
+    ApolloModule,
   ],
   providers: [
     {
       provide: APOLLO_OPTIONS,
-      useFactory: (httpList: HttpLink) =>{
+      useFactory: (httpLink: HttpLink) =>{
         return {
           cache: new InMemoryCache(),
-          link: httpList.create({
-            uri: 'api/graphql',
+          link: httpLink.create({
+            uri: 'http://localhost:7777/graphql/',
           })
         }
       },

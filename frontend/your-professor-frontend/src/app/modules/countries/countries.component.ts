@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {GraphqlService} from "../../core/services/graphql.service";
-import {HttpClient} from "@angular/common/http";
+import {Apollo, gql} from 'apollo-angular';
 
 @Component({
   selector: 'app-countries',
@@ -9,34 +8,31 @@ import {HttpClient} from "@angular/common/http";
 })
 export class CountriesComponent implements OnInit {
   results: any;
+  loading = true;
+  error: any;
 
-  constructor(public graphqlService: GraphqlService) {}
+  constructor(private apollo: Apollo) {}
   ngOnInit(): void {
     this.query();
   }
 
   query(){
-    let query = `
+    this.apollo
+      .watchQuery({
+        query: gql`
           {
             allCountries{
               local_language_name
             }
           }
-      `;
-    // console.log(query);
-    // console.log(JSON.stringify(query));
-    let subscription = this.graphqlService.query({
-      query: `
-          {
-            allCountries{
-              local_language_name
-            }
-          }
-      `
-    }).subscribe( results => {
-      this.results = results;
-    });
-    console.log(this.results);
+        `,
+      })
+      .valueChanges.subscribe((result: any) => {
+        this.results = result?.data;
+        this.loading = result.loading;
+        this.error = result.error;
+        console.log(this.results)
+      });
   }
 
 }

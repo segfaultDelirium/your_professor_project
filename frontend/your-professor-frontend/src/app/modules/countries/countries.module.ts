@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 
 import { CountriesRoutingModule } from './countries-routing.module';
 import { CountriesComponent } from './countries.component';
-import {GraphqlService} from "../../core/services/graphql.service";
 
 
 
@@ -16,7 +15,6 @@ import {GraphqlService} from "../../core/services/graphql.service";
     CountriesRoutingModule
   ],
   providers: [
-    GraphqlService
   ]
 })
 export class CountriesModule { }
