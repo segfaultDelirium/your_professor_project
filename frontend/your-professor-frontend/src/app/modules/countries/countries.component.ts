@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {Apollo, gql} from 'apollo-angular';
+import { Apollo, gql } from 'apollo-angular';
 
 @Component({
   selector: 'app-countries',
@@ -11,13 +11,13 @@ export class CountriesComponent implements OnInit {
   loading = true;
   error: any;
 
-  constructor(private apollo: Apollo) {}
+  constructor(private apollo: Apollo) { }
   ngOnInit(): void {
     this.query();
   }
 
-  query(){
-    this.apollo
+  query() {
+    let result = this.apollo
       .watchQuery({
         query: gql`
           {
@@ -34,5 +34,6 @@ export class CountriesComponent implements OnInit {
         console.log(this.results)
       });
   }
+
 
 }
