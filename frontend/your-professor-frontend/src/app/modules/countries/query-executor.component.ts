@@ -2,14 +2,21 @@ import { Component, OnInit } from '@angular/core';
 import { Apollo, gql } from 'apollo-angular';
 
 @Component({
-  selector: 'app-countries',
-  templateUrl: './countries.component.html',
-  styleUrls: ['./countries.component.scss']
+  selector: 'app-QueryExecutor',
+  templateUrl: './query-executor.component.html',
+  styleUrls: ['./query-executor.component.scss']
 })
-export class CountriesComponent implements OnInit {
+export class QueryExecutorComponent implements OnInit {
   results: any;
   loading = true;
   error: any;
+  queryString: string = `
+  {
+    allCountries{
+      local_language_name
+    }
+  }
+`;
 
   constructor(private apollo: Apollo) { }
   ngOnInit(): void {
@@ -20,11 +27,7 @@ export class CountriesComponent implements OnInit {
     let result = this.apollo
       .watchQuery({
         query: gql`
-          {
-            allCountries{
-              local_language_name
-            }
-          }
+          ${this.queryString}
         `,
       })
       .valueChanges.subscribe((result: any) => {
@@ -34,6 +37,8 @@ export class CountriesComponent implements OnInit {
         console.log(this.results)
       });
   }
-
-
+  stringify(value: any){
+    return JSON.stringify(value, null, 4);
+  }
+  
 }

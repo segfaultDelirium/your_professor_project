@@ -1,0 +1,9 @@
+.results{
+    white-space:pre   
+}
+.query{
+    width: 500px;
+    & mat-form-field{
+        width: 100%;
+    }
+}

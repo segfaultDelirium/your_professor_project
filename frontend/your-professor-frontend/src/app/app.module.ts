@@ -13,10 +13,12 @@ import {HttpClientModule} from "@angular/common/http";
 import {LayoutModule} from './layout/layout.module';
 import {MaterialModule} from "./core/modules/material/material.module";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
+import { ExampleQueriesComponent } from './modules/example-queries/example-queries.component';
 
 @NgModule({
   declarations: [
     AppComponent,
+    ExampleQueriesComponent,
 
   ],
   imports: [

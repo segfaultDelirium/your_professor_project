@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import {LoginComponent} from "./auth/login/login.component";
 import {SignUpComponent} from "./auth/sign-up/sign-up.component";
+import { ExampleQueriesComponent } from './modules/example-queries/example-queries.component';
 
 const routes: Routes = [
   {
@@ -12,8 +13,9 @@ const routes: Routes = [
   },
   { path: 'home', loadChildren: () => import('./modules/home/home.module').then(m => m.HomeModule) },
   { path: '', redirectTo: 'home', pathMatch: 'full'},
-  { path: 'countries', loadChildren: () => import('./modules/countries/countries.module').then(m => m.CountriesModule) }
-
+  { path: 'examples', component: ExampleQueriesComponent},
+  { path: 'QueryExecutor', loadChildren: () => import('./modules/countries/query-executor.module').then(m => m.QueryExecutorModule) }
+  
 ];
 
 @NgModule({
