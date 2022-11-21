@@ -37,6 +37,7 @@ export class QueryExecutorComponent implements OnInit {
         console.log(this.results)
       });
   }
+  
   stringify(value: any){
     return JSON.stringify(value, null, 4);
   }
