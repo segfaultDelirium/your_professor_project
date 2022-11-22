@@ -199,7 +199,35 @@ export class ExampleQueriesComponent implements OnInit {
           }
         }
       }
-    }`
+    }`,
+    `
+    mutation{
+      createCountryByISO(ISO_code_name: "IT", local_language_name: "Italy"){
+        country{
+          ISO_code_name,
+          is_active,
+          local_language_name,
+          uid
+        }
+        error
+        status
+      }
+    }    
+    `,
+    `
+    mutation{
+      updateCountry(uid: "3563831de98c4c3dbe93d80bb0d7ffd4", is_active: false){
+        country{
+          ISO_code_name,
+          is_active,
+          local_language_name,
+          uid
+        }
+        error
+        status
+      }
+    }
+    `
 
   ];
 
