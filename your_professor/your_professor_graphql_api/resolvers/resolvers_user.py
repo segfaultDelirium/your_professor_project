@@ -26,7 +26,7 @@ def resolve_all_users(obj, info, amount: int = None):
 
 
 @check_database_connection
-def resolve_create_user(_, info, is_active: bool = None, username: str = None, password: str = None,
+def resolve_create_user(_, info, is_active: bool = True, username: str = None, password: str = None,
                         email_address: str = None, is_staff: bool = None, is_super_user: bool = None,
                         first_name: str = None, last_name: str = None, birthday: str = None, is_male: bool = None):
     db.begin()

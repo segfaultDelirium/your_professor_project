@@ -12,6 +12,9 @@ import {MatListModule} from "@angular/material/list";
 import {MatGridListModule} from "@angular/material/grid-list";
 import {MatCardModule} from "@angular/material/card";
 import {MatCheckboxModule} from "@angular/material/checkbox";
+import { MatInputModule } from '@angular/material/input';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [],
@@ -28,6 +31,9 @@ import {MatCheckboxModule} from "@angular/material/checkbox";
     MatGridListModule,
     MatCardModule,
     MatCheckboxModule,
+    MatInputModule,
+    MatFormFieldModule,
+    FormsModule,
   ],
   exports: [
     MatToolbarModule,
@@ -41,6 +47,9 @@ import {MatCheckboxModule} from "@angular/material/checkbox";
     MatGridListModule,
     MatCardModule,
     MatCheckboxModule,
+    MatInputModule,
+    MatFormFieldModule,
+    FormsModule,
   ]
 })
 export class MaterialModule { }

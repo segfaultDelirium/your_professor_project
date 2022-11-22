@@ -96,8 +96,8 @@ neo4j_password = "3BejhhmCyUa4oPLm2XAgmX8GcsGqipFf9EtQvmPuo"
 neo4j_remote_login = "neo4j"
 neo4j_remote_password = "qdwY3YGWjTODKTKTit-K0-02F5hN1Q4aJPhsHULzyTI"
 neo4j_remote_uri = "badaeea5.databases.neo4j.io"
-config.DATABASE_URL = f'bolt://{neo4j_login}:{neo4j_password}@localhost:7687/neo4j'  # default
-#config.DATABASE_URL = 'neo4j+s://{}:{}@{}'.format(neo4j_remote_login, neo4j_remote_password, neo4j_remote_uri)
+# config.DATABASE_URL = f'bolt://{neo4j_login}:{neo4j_password}@localhost:7687/neo4j'  # default
+config.DATABASE_URL = 'neo4j+s://{}:{}@{}'.format(neo4j_remote_login, neo4j_remote_password, neo4j_remote_uri)
 
 # You can specify a database name: 'bolt://neo4j:neo4j@localhost:7687/mydb'
 

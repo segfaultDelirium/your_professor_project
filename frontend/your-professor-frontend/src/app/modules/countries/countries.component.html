@@ -1,8 +1,20 @@
-<button type="button" (click)="query()">query</button>
-<p>countries works!</p>
-<p *ngFor="let country of results.allCountries">
-  {{country.local_language_name}}
-</p>
-<!-- <p *ngFor="let result in this.results">
-  {{result}}
-</p> -->
+<div>
+    <div>
+        <app-search-country></app-search-country>
+    </div>
+    <mat-divider></mat-divider>
+    <div>
+        <app-list-countries></app-list-countries>
+
+    </div>
+    <mat-divider></mat-divider>
+    <div>
+        <app-create-country></app-create-country>
+
+    </div>
+    <mat-divider></mat-divider>
+    <div>
+        <app-update-country></app-update-country>
+
+    </div>
+</div>
