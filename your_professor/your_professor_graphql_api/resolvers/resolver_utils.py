@@ -1,5 +1,5 @@
 from neomodel import StructuredNode
-from py2neo import Graph, errors
+# from py2neo import Graph, errors
 from your_professor.settings import neo4j_login, neo4j_password # ignore red underline, it's all good!
 from datetime import datetime
 from ..mutation_payloads import create_mutation_payload
@@ -20,12 +20,21 @@ def get_amount_or_all_of(node_class: StructuredNode, amount: int):
 
 def check_database_connection(f):
     def wrapper(*args, **kwargs):
-        try:
-            Graph("bolt://localhost:7687", auth=(neo4j_login, neo4j_password))
-        except errors.ConnectionUnavailable as e:
-            raise errors.ConnectionUnavailable("connection to database could not be established")
+        # try:
+        #     Graph("bolt://localhost:7687", auth=(neo4j_login, neo4j_password))
+        # except errors.ConnectionUnavailable as e:
+        #     raise errors.ConnectionUnavailable("connection to database could not be established")
         return f(*args, **kwargs)
     return wrapper
+
+# def check_database_connection(f):
+#     def wrapper(*args, **kwargs):
+#         try:
+#             Graph("bolt://localhost:7687", auth=(neo4j_login, neo4j_password))
+#         except errors.ConnectionUnavailable as e:
+#             raise errors.ConnectionUnavailable("connection to database could not be established")
+#         return f(*args, **kwargs)
+#     return wrapper
 
 
 def check_birthday_format(birthday: str, birthday_format: str = BIRTHDAY_FORMAT):
