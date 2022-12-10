@@ -1,6 +1,6 @@
 # for some reason the dictionary keys cannot be of type int
 DEGREES = {'0': 'no_degree', '1': "bachelor", '2': "master", '3': "doctor"}
-BIRTHDAY_FORMAT = "%Y-%m-%d"
+# BIRTHDAY_FORMAT = "%YYYY-%mm-%dd"
 LOGIN_TIMESTAMP_FORMAT = "%Y-%m-%d %h-%m-%s"
 QUALITY = {'1': "terrible", '2': "bad", '3': "ok", '4': "good", '5': "great"}
 DIFFICULTY = {'1': "very difficult", '2': "difficult", '3': "moderate", '4': "easy", '5': "very easy"}

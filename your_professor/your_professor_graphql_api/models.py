@@ -21,7 +21,6 @@ class Country(DjangoNode):
     local_language_name = StringProperty(required=True)
     ISO_code_name = StringProperty(choices=COUNTRIES, required=True, unique_index=True)
     is_active = BooleanProperty(default=True)
-    # language = StringProperty(max_length=100, required=True)
     regions = RelationshipTo("Region", "CONTAINS_REGION", cardinality=ZeroOrMore)
 
 
@@ -89,7 +88,6 @@ class ScienceDomain(StructuredNode):  # example biology, computer science
 
 
 class TeachesCourse(StructuredRel):
-    # uid = UniqueIdProperty()
     is_active = BooleanProperty(default=True)
     is_professor_lecturer = BooleanProperty(default=False)
 
